@@ -1,0 +1,1389 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Isabelle G9 Math Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: green-notebook workbook — graph-paper header, single reading column, sticky topic rail */
+:root {
+  --paper: #f4f7f4;
+  --card: #ffffff;
+  --ink: #16211b;
+  --muted: #59695f;
+  --line: #d6e0d9;
+  --grid: rgba(30, 106, 76, .07);
+  --accent: #1e6a4c;
+  --accent-soft: #e1eee7;
+  --amber: #a85b17;
+  --amber-soft: #f6e8d8;
+  --display: "Bricolage Grotesque", "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e1411; --card: #141c18; --ink: #e2eae5; --muted: #98aa9f; --line: #25332b;
+    --grid: rgba(92, 193, 150, .06); --accent: #62c49a; --accent-soft: #17302a; --amber: #e5a465; --amber-soft: #34261a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e1411; --card: #141c18; --ink: #e2eae5; --muted: #98aa9f; --line: #25332b;
+  --grid: rgba(92, 193, 150, .06); --accent: #62c49a; --accent-soft: #17302a; --amber: #e5a465; --amber-soft: #34261a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 15px/1.6 var(--body); }
+.wrap { max-width: 920px; margin: 0 auto; padding-inline: 16px; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* header */
+.hero {
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 22px 22px;
+  border-bottom: 1px solid var(--line);
+  padding-block: 40px 28px;
+}
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; }
+h1 { font: 700 clamp(30px, 6vw, 46px)/1.08 var(--display); margin: 0 0 10px; text-wrap: balance; letter-spacing: -.01em; }
+.sub { color: var(--muted); margin: 0; max-width: 62ch; }
+.stats { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 18px; font-size: 13px; color: var(--muted); }
+.stats b { font: 700 20px/1 var(--display); color: var(--ink); margin-right: 4px; font-variant-numeric: tabular-nums; }
+
+/* overview */
+.overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px; padding-block: 26px 8px; }
+.course { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; min-width: 0; }
+.course h2 { font: 700 18px/1.25 var(--display); margin: 0 0 4px; }
+.course .code { font: 500 11px/1 var(--mono); color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+.course ul { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; }
+.course li { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: baseline; font-size: 14px; }
+.st { font: 500 11px/1 var(--mono); padding: 4px 7px; border-radius: 4px; white-space: nowrap; }
+.st.done { background: var(--accent-soft); color: var(--accent); }
+.st.now { background: var(--accent); color: var(--card); }
+.st.next { background: var(--amber-soft); color: var(--amber); }
+.alert { margin: 14px 0 0; padding: 12px 16px; border-radius: 10px; background: var(--amber-soft); color: var(--ink); font-size: 14px; border: 1px solid color-mix(in srgb, var(--amber) 30%, transparent); }
+.alert b { color: var(--amber); }
+
+.howto { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; padding-block: 18px 6px; }
+.howto > div { min-width: 0; }
+.howto h3 { font: 700 15px/1.3 var(--display); margin: 0 0 6px; }
+.howto p, .howto ol { margin: 0; font-size: 14px; color: var(--muted); }
+.howto ol { padding-left: 1.2em; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+/* sticky nav */
+.rail { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); border-block: 1px solid var(--line); margin-top: 22px; }
+.rail .wrap { display: flex; gap: 6px; overflow-x: auto; padding-block: 9px; scrollbar-width: thin; }
+.rail a { flex: none; font-size: 13px; text-decoration: none; color: var(--ink); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); }
+.rail a:hover { border-color: var(--accent); color: var(--accent); }
+.rail .grp { flex: none; font: 500 11px/26px var(--mono); color: var(--muted); padding-left: 6px; letter-spacing: .05em; }
+.rail .go { background: var(--accent); color: var(--card); border-color: var(--accent); }
+
+/* parts and topics */
+.part { padding-block: 34px 0; }
+.part-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; margin-bottom: 6px; }
+.part-head h2 { font: 700 26px/1.15 var(--display); margin: 0; }
+.part-head p { margin: 0; color: var(--muted); font-size: 14px; }
+.topic { padding-block: 30px 6px; border-bottom: 1px solid var(--line); scroll-margin-top: 60px; }
+.unit { font: 500 11px/1 var(--mono); color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin: 0 0 8px; }
+.topic h3 { font: 700 23px/1.2 var(--display); margin: 0; text-wrap: balance; }
+.topic h3 .en { font-weight: 500; color: var(--muted); font-size: .72em; margin-left: 4px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; font-size: 13px; color: var(--muted); }
+.tag { font: 500 11px/1 var(--mono); padding: 5px 8px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
+.tag.hot { background: var(--amber-soft); color: var(--amber); }
+.to-drill { font-size: 13px; margin-left: auto; text-decoration: none; }
+.key { margin: 16px 0 6px; padding: 12px 16px; background: var(--card); border: 1px dashed var(--line); border-radius: 8px; }
+.key-label { font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+.key ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; font-size: 14px; }
+
+.level { margin-top: 16px; padding-left: 14px; border-left: 3px solid var(--line); }
+.lv1 { border-left-color: color-mix(in srgb, var(--accent) 30%, var(--line)); }
+.lv2 { border-left-color: color-mix(in srgb, var(--accent) 65%, var(--line)); }
+.lv3 { border-left-color: var(--accent); }
+.lv4 { border-left-color: var(--amber); }
+.lv-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.lv-chip { font: 500 11px/1 var(--mono); padding: 4px 7px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
+.lv3 .lv-chip { background: var(--accent); color: var(--card); }
+.lv4 .lv-chip { background: var(--amber); color: var(--card); }
+.lv-name { font-weight: 600; }
+.lv-count { color: var(--muted); font-size: 13px; }
+.done { margin-left: auto; font-size: 13px; color: var(--muted); display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
+.done input { accent-color: var(--accent); width: 16px; height: 16px; }
+.level.is-done .lv-name { text-decoration: line-through; text-decoration-color: var(--accent); color: var(--muted); }
+.instr { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+
+ol.qs { margin: 10px 0 0; padding: 0; list-style: none; counter-reset: q; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px 18px; }
+ol.qs.wide { grid-template-columns: 1fr; }
+ol.qs > li { counter-increment: q; position: relative; padding-left: 30px; min-width: 0; overflow-x: auto; overflow-y: hidden; }
+ol.qs > li::before { content: counter(q) "."; position: absolute; left: 0; top: 1px; font: 500 12px/1.9 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+details.ans { margin-top: 12px; }
+details.ans summary { cursor: pointer; display: inline-block; font-size: 13px; color: var(--accent); padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); user-select: none; }
+details.ans summary::-webkit-details-marker { display: none; }
+details.ans[open] summary { background: var(--accent-soft); }
+details.ans > ol { padding: 12px 14px; background: var(--accent-soft); border-radius: 8px; }
+details.ans > ol > li::before { color: var(--accent); }
+
+/* drills */
+.drill-intro { color: var(--muted); font-size: 14px; max-width: 64ch; margin: 10px 0 0; }
+.drill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 18px; }
+.drill { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; min-width: 0; display: flex; flex-direction: column; }
+.drill h4 { font: 700 16px/1.25 var(--display); margin: 0; }
+.drill .en { font-size: 12px; color: var(--muted); }
+.drill .instr { font-size: 13px; }
+.drill ol.qs { grid-template-columns: 1fr; gap: 8px; flex: 1; }
+.drill .a { display: block; color: var(--accent); font-size: 14px; }
+.drill:not(.show) .a { visibility: hidden; height: 0; overflow: hidden; }
+.drill .bar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+.drill .round { font: 500 11px/1 var(--mono); color: var(--muted); margin-left: auto; }
+button { font: 500 13px/1 var(--body); padding: 7px 12px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent); color: var(--card); cursor: pointer; }
+button.ghost { background: transparent; color: var(--accent); }
+button:hover { filter: brightness(1.08); }
+
+footer { padding-block: 40px; color: var(--muted); font-size: 13px; }
+mjx-container { max-width: 100%; }
+@media (max-width: 520px) { ol.qs { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); } .to-drill { margin-left: 0; } }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; }
+@media print {
+  .rail, .drill .bar, .done, .to-drill, #drills { display: none !important; }
+  body { background: #fff; color: #000; }
+  .topic { break-inside: auto; }
+  .level { break-inside: avoid; }
+}
+</style>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  options: { enableMenu: false }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js" async></script>
+
+</head><body>
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">ISF · Grade 9 · 2026–27 Term 1</p>
+    <h1>Isabelle 的 G9 数学练习册</h1>
+    <p class="sub">根据 Moodle 上 <b>G09 Extended Mathematics 4</b> 和 <b>G09 Shuyuan Mathematics for Engineering 3</b> 两门课的本学期内容整理。每个知识点从基础到挑战分级；需要熟练掌握的计算点另有可无限刷新的随机练习。</p>
+    <div class="stats">
+      <span><b>455</b>道分级题</span>
+      <span><b>14</b>类随机练习（每组 8 题，可无限换）</span>
+      <span><b>17</b>个知识点</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="overview">
+    <div class="course">
+      <span class="code">G09 Extended Mathematics 4</span>
+      <h2>延伸数学</h2>
+      <ul>
+        <li><span class="st done">已考</span><span>Unit 1 Statistics：集中趋势、标准差、异常值、散点图与回归（9月14/15日 Criterion C/D）</span></li>
+        <li><span class="st now">进行中</span><span>Unit 2 Exploring Space：实数分类、科学记数法、指数法则、分数/负指数、指数方程、根式</span></li>
+        <li><span class="st next">待公布</span><span>后续单元 Moodle 上还没有内容</span></li>
+      </ul>
+    </div>
+    <div class="course">
+      <span class="code">G09 Shuyuan Mathematics for Engineering 3</span>
+      <h2>工程数学</h2>
+      <ul>
+        <li><span class="st done">已学</span><span>Module 1 Prerequisite Math：三角函数与单位圆、弧度、恒等式；一次/二次函数与数据分析；极坐标、向量、基础矩阵</span></li>
+        <li><span class="st now">进行中</span><span>Module 2 Motion：位移/速度/加速度图像，一维 SUVAT，二维 SUVAT 与抛体运动，弹珠发射器项目（发射 2 m）</span></li>
+        <li><span class="st done">补充</span><span>二进制与十六进制（Rainy Day 课）</span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="alert"><b>10月21/22日：Criterion A – Algebra 测验</b>（Extended Math）。<span id="countdown"></span>建议先完成 Part A 的 Unit 2 全部内容，最后做“综合测验模拟”。</p>
+
+  <div class="howto">
+    <div>
+      <h3>怎么用</h3>
+      <ol>
+        <li>每个知识点先读“要点”，再按 L1 → L2 → L3 → 挑战 顺序做。</li>
+        <li>做完一组再展开“答案”对照，错题在本子上重做一遍。</li>
+        <li>勾选“完成”会保存在这台设备的浏览器里。</li>
+      </ol>
+    </div>
+    <div>
+      <h3>必练计算怎么巩固</h3>
+      <p>标着 <span class="tag hot">必练计算</span> 的知识点，做完固定题后去页面底部的“随机练习”，每天刷 1–2 组。连续两组全对，再换下一类。</p>
+      <div class="legend"><span class="lv-chip">L1 基础</span><span class="lv-chip">L2 熟练</span><span class="lv-chip" style="background:var(--accent);color:var(--card)">L3 提高</span><span class="lv-chip" style="background:var(--amber);color:var(--card)">挑战</span></div>
+    </div>
+    <div>
+      <h3>测验前两周安排</h3>
+      <p><b>10/5–10/11</b> 实数分类、科学记数法、指数法则、零/负指数<br><b>10/12–10/18</b> 分数指数、指数方程、根式<br><b>10/19–10/20</b> 综合模拟 + 随机练习查漏<br>工程数学每周穿插 2 次 SUVAT / 抛体。</p>
+    </div>
+  </div>
+</div>
+
+<nav class="rail" aria-label="知识点导航">
+  <div class="wrap">
+    <span class="grp">EXT MATH</span><a href="#a-numbers">实数分类</a><a href="#a-sci">科学记数法</a><a href="#a-laws">指数运算法则</a><a href="#a-neg">零指数与负指数</a><a href="#a-frac">分数指数</a><a href="#a-expeq">指数方程</a><a href="#a-surds">根式运算</a><a href="#a-mixed">综合测验模拟</a><a href="#a-stats1">集中趋势与离散程度</a><a href="#a-stats2">标准差与异常值</a><a href="#a-stats3">散点图与回归</a>
+    <span class="grp">MfE</span><a href="#b-trig">三角函数</a><a href="#b-func">函数：一次与二次</a><a href="#b-vec">坐标与向量</a><a href="#b-suvat1">一维运动 SUVAT</a><a href="#b-suvat2">二维运动与抛体</a><a href="#b-binary">二进制与十六进制</a>
+    <a class="go" href="#drills">随机练习</a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section class="part" id="part-a">
+    <div class="part-head"><h2>Part A · Extended Mathematics 4</h2><p>先练当前的 Unit 2，再复习 Unit 1 统计</p></div>
+    
+<section class="topic" id="a-numbers">
+  <header class="topic-head">
+    <p class="unit">Unit 2 · Exploring Space</p>
+    <h3>实数分类 <span class="en">Classifying Numbers</span></h3>
+    <div class="meta"><span class="tag">八年级复习</span><span class="cnt">21 题</span></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(\mathbb{N}\) 自然数 {0, 1, 2, …}（IB 约定含 0）</li><li>\(\mathbb{Z}\) 整数</li><li>\(\mathbb{Q}\) 有理数 = 可写成 \(\frac{p}{q}\)（含有限小数、循环小数）</li><li>\(\mathbb{Q}'\) 无理数：无限不循环，如 \(\pi\)、\(\sqrt{2}\)</li><li>\(\mathbb{N}\subset\mathbb{Z}\subset\mathbb{Q}\subset\mathbb{R}\)</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">10 题</span>
+    <label class="done"><input type="checkbox" id="done-a-numbers-0" data-key="a-numbers-0"> 完成</label>
+  </div>
+  <p class="instr">For each number, list every set it belongs to: \(\mathbb{N}, \mathbb{Z}, \mathbb{Q}, \mathbb{Q}', \mathbb{R}\).</p>
+  <ol class="qs"><li>\(7\)</li><li>\(-3\)</li><li>\(0\)</li><li>\(\frac{2}{5}\)</li><li>\(0.75\)</li><li>\(\sqrt{9}\)</li><li>\(\sqrt{7}\)</li><li>\(\pi\)</li><li>\(0.\overline{3}\)</li><li>\(-\sqrt{16}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(\mathbb{N},\mathbb{Z},\mathbb{Q},\mathbb{R}\)</li><li>\(\mathbb{Z},\mathbb{Q},\mathbb{R}\)</li><li>\(\mathbb{N},\mathbb{Z},\mathbb{Q},\mathbb{R}\)</li><li>\(\mathbb{Q},\mathbb{R}\)</li><li>\(\mathbb{Q},\mathbb{R}\)</li><li>\(=3\)：\(\mathbb{N},\mathbb{Z},\mathbb{Q},\mathbb{R}\)</li><li>\(\mathbb{Q}',\mathbb{R}\)</li><li>\(\mathbb{Q}',\mathbb{R}\)</li><li>\(=\frac13\)：\(\mathbb{Q},\mathbb{R}\)</li><li>\(=-4\)：\(\mathbb{Z},\mathbb{Q},\mathbb{R}\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">6 题</span>
+    <label class="done"><input type="checkbox" id="done-a-numbers-1" data-key="a-numbers-1"> 完成</label>
+  </div>
+  <p class="instr">Write each recurring decimal as a fraction in simplest form.</p>
+  <ol class="qs"><li>\(0.\overline{7}\)</li><li>\(0.\overline{45}\)</li><li>\(0.1\overline{6}\)</li><li>\(2.\overline{3}\)</li><li>\(0.\overline{123}\)</li><li>\(0.2\overline{5}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(\frac{7}{9}\)</li><li>\(\frac{45}{99}=\frac{5}{11}\)</li><li>\(\frac{1}{6}\)（\(100x-10x=15\)）</li><li>\(\frac{7}{3}\)</li><li>\(\frac{123}{999}=\frac{41}{333}\)</li><li>\(\frac{23}{90}\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">5 题</span>
+    <label class="done"><input type="checkbox" id="done-a-numbers-2" data-key="a-numbers-2"> 完成</label>
+  </div>
+  <p class="instr">True or false? If false, give a counter-example.</p>
+  <ol class="qs wide"><li>The sum of two irrational numbers is always irrational.</li><li>\(\sqrt{2}\times\sqrt{8}\) is irrational.</li><li>Every integer is a rational number.</li><li>A non-zero rational number times an irrational number is irrational.</li><li>\(\frac{22}{7}=\pi\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>False：\(\sqrt2+(-\sqrt2)=0\)</li><li>False：\(=\sqrt{16}=4\)</li><li>True：\(n=\frac{n}{1}\)</li><li>True</li><li>False：\(\frac{22}{7}\) 是有理数，只是近似值</li></ol></details>
+</div>
+</section>
+<section class="topic" id="a-sci">
+  <header class="topic-head">
+    <p class="unit">Unit 2 · Exploring Space</p>
+    <h3>科学记数法 <span class="en">Scientific Notation</span></h3>
+    <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">34 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(a\times10^{n}\)，其中 \(1\le a\lt 10\)，\(n\in\mathbb{Z}\)</li><li>相乘：系数相乘、指数相加；相除：系数相除、指数相减</li><li>相加减：先化成相同的 \(10^{n}\) 再计算</li><li>结果的系数不在 1–10 之间时要重新调整</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-a-sci-0" data-key="a-sci-0"> 完成</label>
+  </div>
+  <p class="instr">Write in scientific notation.</p>
+  <ol class="qs"><li>\(45\,000\)</li><li>\(3\,080\,000\)</li><li>\(0.0062\)</li><li>\(0.000\,000\,51\)</li><li>\(702\)</li><li>\(0.9\)</li><li>\(12\,300\,000\,000\)</li><li>\(0.000\,040\,4\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(4.5\times10^{4}\)</li><li>\(3.08\times10^{6}\)</li><li>\(6.2\times10^{-3}\)</li><li>\(5.1\times10^{-7}\)</li><li>\(7.02\times10^{2}\)</li><li>\(9\times10^{-1}\)</li><li>\(1.23\times10^{10}\)</li><li>\(4.04\times10^{-5}\)</li></ol></details>
+</div>
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">6 题</span>
+    <label class="done"><input type="checkbox" id="done-a-sci-1" data-key="a-sci-1"> 完成</label>
+  </div>
+  <p class="instr">Write as an ordinary number.</p>
+  <ol class="qs"><li>\(3.2\times10^{3}\)</li><li>\(7.05\times10^{-2}\)</li><li>\(1.1\times10^{6}\)</li><li>\(9.99\times10^{-4}\)</li><li>\(6\times10^{0}\)</li><li>\(2.004\times10^{5}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(3200\)</li><li>\(0.0705\)</li><li>\(1\,100\,000\)</li><li>\(0.000\,999\)</li><li>\(6\)</li><li>\(200\,400\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-a-sci-2" data-key="a-sci-2"> 完成</label>
+  </div>
+  <p class="instr">Correct each into proper scientific notation.</p>
+  <ol class="qs"><li>\(34\times10^{5}\)</li><li>\(0.52\times10^{-3}\)</li><li>\(0.07\times10^{8}\)</li><li>\(450\times10^{-6}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(3.4\times10^{6}\)</li><li>\(5.2\times10^{-4}\)</li><li>\(7\times10^{6}\)</li><li>\(4.5\times10^{-4}\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-a-sci-3" data-key="a-sci-3"> 完成</label>
+  </div>
+  <p class="instr">Calculate without a calculator. Give answers in scientific notation.</p>
+  <ol class="qs"><li>\((3\times10^{4})(2\times10^{5})\)</li><li>\((4\times10^{3})(5\times10^{6})\)</li><li>\(\dfrac{8\times10^{9}}{2\times10^{3}}\)</li><li>\((3\times10^{-2})(3\times10^{-5})\)</li><li>\(\dfrac{6\times10^{4}}{1.5\times10^{-3}}\)</li><li>\((2.5\times10^{3})^{2}\)</li><li>\((1.2\times10^{-3})(5\times10^{7})\)</li><li>\(\dfrac{9\times10^{-4}}{3\times10^{2}}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(6\times10^{9}\)</li><li>\(20\times10^{9}=2\times10^{10}\)</li><li>\(4\times10^{6}\)</li><li>\(9\times10^{-7}\)</li><li>\(4\times10^{7}\)</li><li>\(6.25\times10^{6}\)</li><li>\(6\times10^{4}\)</li><li>\(3\times10^{-6}\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">5 题</span>
+    <label class="done"><input type="checkbox" id="done-a-sci-4" data-key="a-sci-4"> 完成</label>
+  </div>
+  <p class="instr">Calculate. Give answers in scientific notation.</p>
+  <ol class="qs wide"><li>\(3.2\times10^{5}+4.1\times10^{4}\)</li><li>\(6\times10^{-3}-5\times10^{-4}\)</li><li>The mass of Earth is \(5.97\times10^{24}\) kg and the Moon is \(7.35\times10^{22}\) kg. How many times heavier is Earth?</li><li>Light travels at \(3\times10^{8}\) m/s. Sunlight takes 500 s to reach Earth. Find the distance.</li><li>A red blood cell is \(8\times10^{-6}\) m wide. How many fit in a line 1 cm long?</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(3.2\times10^5+0.41\times10^5=3.61\times10^{5}\)</li><li>\(5.5\times10^{-3}\)</li><li>\(\approx 81.2\) 倍</li><li>\(1.5\times10^{11}\) m</li><li>\(\frac{10^{-2}}{8\times10^{-6}}=1.25\times10^{3}\) 个</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">3 题</span>
+    <label class="done"><input type="checkbox" id="done-a-sci-5" data-key="a-sci-5"> 完成</label>
+  </div>
+  <p class="instr">No calculator.</p>
+  <ol class="qs"><li>\(\sqrt{1.6\times10^{9}}\)</li><li>\((4\times10^{-3})^{-2}\)</li><li>\(\dfrac{(6\times10^{5})^{2}}{9\times10^{-3}}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(\sqrt{16\times10^{8}}=4\times10^{4}\)</li><li>\(\frac{1}{1.6\times10^{-5}}=6.25\times10^{4}\)</li><li>\(4\times10^{13}\)</li></ol></details>
+</div>
+</section>
+<section class="topic" id="a-laws">
+  <header class="topic-head">
+    <p class="unit">Unit 2 · Exploring Space</p>
+    <h3>指数运算法则 <span class="en">Laws of Exponents</span></h3>
+    <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">35 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(a^{m}\cdot a^{n}=a^{m+n}\)</li><li>\(a^{m}\div a^{n}=a^{m-n}\)</li><li>\((a^{m})^{n}=a^{mn}\)</li><li>\((ab)^{n}=a^{n}b^{n}\)</li><li>\(\left(\frac{a}{b}\right)^{n}=\frac{a^{n}}{b^{n}}\)</li><li>系数（数字）照常乘除，字母的指数按法则运算</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">12 题</span>
+    <label class="done"><input type="checkbox" id="done-a-laws-0" data-key="a-laws-0"> 完成</label>
+  </div>
+  <p class="instr">Simplify.</p>
+  <ol class="qs"><li>\(2^{3}\cdot2^{4}\)</li><li>\(x^{5}\cdot x^{2}\)</li><li>\(a^{9}\div a^{4}\)</li><li>\((y^{3})^{4}\)</li><li>\(5^{8}\div5^{6}\)</li><li>\(m\cdot m^{6}\)</li><li>\((2x)^{3}\)</li><li>\(3^{2}\cdot3^{3}\)</li><li>\((p^{2})^{5}\)</li><li>\(x^{10}\div x\)</li><li>\((ab)^{4}\)</li><li>\(\left(\frac{x}{3}\right)^{2}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(2^{7}=128\)</li><li>\(x^{7}\)</li><li>\(a^{5}\)</li><li>\(y^{12}\)</li><li>\(5^{2}=25\)</li><li>\(m^{7}\)</li><li>\(8x^{3}\)</li><li>\(3^{5}=243\)</li><li>\(p^{10}\)</li><li>\(x^{9}\)</li><li>\(a^{4}b^{4}\)</li><li>\(\frac{x^{2}}{9}\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">12 题</span>
+    <label class="done"><input type="checkbox" id="done-a-laws-1" data-key="a-laws-1"> 完成</label>
+  </div>
+  <p class="instr">Simplify.</p>
+  <ol class="qs"><li>\(3x^{2}\cdot4x^{5}\)</li><li>\(15a^{8}\div5a^{3}\)</li><li>\((3m^{4})^{2}\)</li><li>\((-2y^{3})^{3}\)</li><li>\(2a^{3}b\cdot5ab^{4}\)</li><li>\(\dfrac{24x^{6}y^{4}}{6x^{2}y}\)</li><li>\((x^{2}y^{3})^{4}\)</li><li>\((2p^{3}q)^{2}\cdot3pq^{2}\)</li><li>\(\dfrac{(5x^{3})^{2}}{25x^{4}}\)</li><li>\(\dfrac{(a^{4})^{3}\cdot a^{2}}{a^{7}}\)</li><li>\((-3a^{2}b)^{2}\)</li><li>\(\dfrac{18m^{5}n^{3}}{-3m^{2}n^{3}}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(12x^{7}\)</li><li>\(3a^{5}\)</li><li>\(9m^{8}\)</li><li>\(-8y^{9}\)</li><li>\(10a^{4}b^{5}\)</li><li>\(4x^{4}y^{3}\)</li><li>\(x^{8}y^{12}\)</li><li>\(12p^{7}q^{4}\)</li><li>\(x^{2}\)</li><li>\(a^{7}\)</li><li>\(9a^{4}b^{2}\)</li><li>\(-6m^{3}\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-a-laws-2" data-key="a-laws-2"> 完成</label>
+  </div>
+  <p class="instr">Simplify fully.</p>
+  <ol class="qs"><li>\(\dfrac{(4x^{3}y^{2})^{3}}{8x^{5}y^{4}}\)</li><li>\(\dfrac{(2a^{2}b^{3})^{4}(3ab)^{2}}{12a^{7}b^{10}}\)</li><li>\(\dfrac{(6x^{4}y)^{2}}{9x^{3}y^{2}}\cdot(xy^{2})^{3}\)</li><li>\((-2m^{3}n)^{3}(-mn^{2})^{2}\)</li><li>\(\dfrac{2^{5}\cdot4^{3}}{8^{2}}\)（写成 2 的幂）</li><li>\(\dfrac{9^{4}\cdot27^{2}}{3^{12}}\)</li><li>\(\dfrac{(x^{2n})^{3}\cdot x^{n}}{x^{4n}}\)</li><li>\(5^{n+2}-5^{n}\)（提公因式）</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(8x^{4}y^{2}\)</li><li>\(12a^{3}b^{4}\)</li><li>\(4x^{8}y^{6}\)</li><li>\(-8m^{11}n^{7}\)</li><li>\(\frac{2^5\cdot2^6}{2^6}=2^{5}=32\)</li><li>\(\frac{3^8\cdot3^6}{3^{12}}=3^{2}=9\)</li><li>\(x^{3n}\)</li><li>\(5^{n}(25-1)=24\cdot5^{n}\)</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">3 题</span>
+    <label class="done"><input type="checkbox" id="done-a-laws-3" data-key="a-laws-3"> 完成</label>
+  </div>
+  <p class="instr">Think before you calculate.</p>
+  <ol class="qs wide"><li>Simplify \(\dfrac{2^{n+3}-2^{n+1}}{2^{n}}\).</li><li>Which is larger, \(2^{30}\) or \(3^{20}\)? Explain without a calculator.</li><li>Find the last digit of \(7^{2026}\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(2^{3}-2^{1}=6\)</li><li>\(2^{30}=8^{10}\)，\(3^{20}=9^{10}\)，所以 \(3^{20}\) 更大</li><li>末位循环 7, 9, 3, 1（周期 4），\(2026\div4\) 余 2 → 末位是 9</li></ol></details>
+</div>
+</section>
+<section class="topic" id="a-neg">
+  <header class="topic-head">
+    <p class="unit">Unit 2 · Exploring Space</p>
+    <h3>零指数与负指数 <span class="en">Zero & Negative Indices</span></h3>
+    <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">30 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(a^{0}=1\ (a\ne0)\)</li><li>\(a^{-n}=\dfrac{1}{a^{n}}\)</li><li>\(\dfrac{1}{a^{-n}}=a^{n}\)</li><li>\(\left(\dfrac{a}{b}\right)^{-n}=\left(\dfrac{b}{a}\right)^{n}\)</li><li>最终答案一般写成正指数</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">12 题</span>
+    <label class="done"><input type="checkbox" id="done-a-neg-0" data-key="a-neg-0"> 完成</label>
+  </div>
+  <p class="instr">Evaluate.</p>
+  <ol class="qs"><li>\(5^{0}\)</li><li>\(2^{-1}\)</li><li>\(3^{-2}\)</li><li>\(10^{-3}\)</li><li>\(4^{-1}\)</li><li>\((-7)^{0}\)</li><li>\(2^{-4}\)</li><li>\(\left(\frac12\right)^{-1}\)</li><li>\(\left(\frac13\right)^{-2}\)</li><li>\(\left(\frac25\right)^{-1}\)</li><li>\(6^{-2}\)</li><li>\((-2)^{-3}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(1\)</li><li>\(\frac12\)</li><li>\(\frac19\)</li><li>\(\frac{1}{1000}\)</li><li>\(\frac14\)</li><li>\(1\)</li><li>\(\frac{1}{16}\)</li><li>\(2\)</li><li>\(9\)</li><li>\(\frac52\)</li><li>\(\frac{1}{36}\)</li><li>\(-\frac18\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">10 题</span>
+    <label class="done"><input type="checkbox" id="done-a-neg-1" data-key="a-neg-1"> 完成</label>
+  </div>
+  <p class="instr">Simplify. Write with positive indices only.</p>
+  <ol class="qs"><li>\(x^{-3}\)</li><li>\(3x^{-2}\)</li><li>\((3x)^{-2}\)</li><li>\(a^{5}\cdot a^{-8}\)</li><li>\(\dfrac{x^{-2}}{x^{-6}}\)</li><li>\((y^{-2})^{3}\)</li><li>\(2a^{-1}b^{2}\)</li><li>\(\dfrac{1}{x^{-4}}\)</li><li>\((2x^{-3})^{-2}\)</li><li>\(\dfrac{6m^{-2}n}{2m^{-5}n^{3}}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(\frac{1}{x^{3}}\)</li><li>\(\frac{3}{x^{2}}\)</li><li>\(\frac{1}{9x^{2}}\)</li><li>\(\frac{1}{a^{3}}\)</li><li>\(x^{4}\)</li><li>\(\frac{1}{y^{6}}\)</li><li>\(\frac{2b^{2}}{a}\)</li><li>\(x^{4}\)</li><li>\(\frac{x^{6}}{4}\)</li><li>\(\frac{3m^{3}}{n^{2}}\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">6 题</span>
+    <label class="done"><input type="checkbox" id="done-a-neg-2" data-key="a-neg-2"> 完成</label>
+  </div>
+  <p class="instr">Evaluate or simplify.</p>
+  <ol class="qs"><li>\((3^{-1}+2^{-1})^{-1}\)</li><li>\(\left(\frac23\right)^{-2}+\left(\frac12\right)^{-3}\)</li><li>\((a^{-2}b^{3})^{-2}(a^{3}b^{-1})^{2}\)</li><li>\(x^{-1}+y^{-1}\)（写成一个分式）</li><li>\((4x^{-2}y^{3})^{-1}(2xy^{-1})^{-2}\)</li><li>\(2^{-1}+2^{-2}+2^{-3}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(\left(\frac56\right)^{-1}=\frac65\)</li><li>\(\frac94+8=\frac{41}{4}\)</li><li>\(\frac{a^{10}}{b^{8}}\)</li><li>\(\frac{x+y}{xy}\)</li><li>\(\frac{1}{16y}\)</li><li>\(\frac78\)</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">2 题</span>
+    <label class="done"><input type="checkbox" id="done-a-neg-3" data-key="a-neg-3"> 完成</label>
+  </div>
+  <p class="instr">Simplify.</p>
+  <ol class="qs"><li>\(\dfrac{5^{-1}-5^{-2}}{5^{-2}}\)</li><li>\(\dfrac{x^{-1}-y^{-1}}{x^{-2}-y^{-2}}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(4\)</li><li>\(\frac{xy}{x+y}\)</li></ol></details>
+</div>
+</section>
+<section class="topic" id="a-frac">
+  <header class="topic-head">
+    <p class="unit">Unit 2 · Exploring Space</p>
+    <h3>分数指数 <span class="en">Fractional Indices</span></h3>
+    <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">43 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(a^{\frac1n}=\sqrt[n]{a}\)</li><li>\(a^{\frac mn}=\left(\sqrt[n]{a}\right)^{m}=\sqrt[n]{a^{m}}\)</li><li>\(a^{-\frac mn}=\dfrac{1}{a^{\frac mn}}\)</li><li>技巧：先开方（分母），再乘方（分子），数字更小更好算</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">12 题</span>
+    <label class="done"><input type="checkbox" id="done-a-frac-0" data-key="a-frac-0"> 完成</label>
+  </div>
+  <p class="instr">Evaluate.</p>
+  <ol class="qs"><li>\(25^{\frac12}\)</li><li>\(8^{\frac13}\)</li><li>\(81^{\frac12}\)</li><li>\(16^{\frac14}\)</li><li>\(27^{\frac13}\)</li><li>\(32^{\frac15}\)</li><li>\(64^{\frac12}\)</li><li>\(64^{\frac13}\)</li><li>\(64^{\frac16}\)</li><li>\(1000^{\frac13}\)</li><li>\(49^{\frac12}\)</li><li>\(125^{\frac13}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(5\)</li><li>\(2\)</li><li>\(9\)</li><li>\(2\)</li><li>\(3\)</li><li>\(2\)</li><li>\(8\)</li><li>\(4\)</li><li>\(2\)</li><li>\(10\)</li><li>\(7\)</li><li>\(5\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">12 题</span>
+    <label class="done"><input type="checkbox" id="done-a-frac-1" data-key="a-frac-1"> 完成</label>
+  </div>
+  <p class="instr">Evaluate.</p>
+  <ol class="qs"><li>\(8^{\frac23}\)</li><li>\(27^{\frac23}\)</li><li>\(16^{\frac34}\)</li><li>\(25^{\frac32}\)</li><li>\(4^{\frac52}\)</li><li>\(32^{\frac35}\)</li><li>\(9^{-\frac12}\)</li><li>\(8^{-\frac23}\)</li><li>\(16^{-\frac34}\)</li><li>\(\left(\frac14\right)^{\frac12}\)</li><li>\(\left(\frac{8}{27}\right)^{\frac23}\)</li><li>\(\left(\frac{9}{16}\right)^{-\frac12}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(4\)</li><li>\(9\)</li><li>\(8\)</li><li>\(125\)</li><li>\(32\)</li><li>\(8\)</li><li>\(\frac13\)</li><li>\(\frac14\)</li><li>\(\frac18\)</li><li>\(\frac12\)</li><li>\(\frac49\)</li><li>\(\frac43\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">6 题</span>
+    <label class="done"><input type="checkbox" id="done-a-frac-2" data-key="a-frac-2"> 完成</label>
+  </div>
+  <p class="instr">Write in index form \(x^{n}\).</p>
+  <ol class="qs"><li>\(\sqrt{x}\)</li><li>\(\sqrt[3]{x^{2}}\)</li><li>\(\dfrac{1}{\sqrt{x}}\)</li><li>\(\sqrt[5]{a^{3}}\)</li><li>\(x\sqrt{x}\)</li><li>\(\dfrac{1}{\sqrt[3]{x^{4}}}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(x^{\frac12}\)</li><li>\(x^{\frac23}\)</li><li>\(x^{-\frac12}\)</li><li>\(a^{\frac35}\)</li><li>\(x^{\frac32}\)</li><li>\(x^{-\frac43}\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">10 题</span>
+    <label class="done"><input type="checkbox" id="done-a-frac-3" data-key="a-frac-3"> 完成</label>
+  </div>
+  <p class="instr">Evaluate or simplify.</p>
+  <ol class="qs"><li>\(\left(\frac{27}{64}\right)^{-\frac23}\)</li><li>\(0.04^{-\frac12}\)</li><li>\((x^{6})^{\frac23}\)</li><li>\((16x^{8})^{\frac34}\)</li><li>\((8a^{6}b^{-3})^{-\frac13}\)</li><li>\(x^{\frac12}\cdot x^{\frac13}\)</li><li>\((a^{\frac34})^{2}\div a^{\frac12}\)</li><li>\(\dfrac{\sqrt{x}\cdot\sqrt[3]{x}}{x^{\frac16}}\)</li><li>\(4^{\frac32}+27^{\frac23}-16^{\frac14}\)</li><li>\(\left(\frac18\right)^{-\frac23}\times81^{-\frac14}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(\frac{16}{9}\)</li><li>\(5\)</li><li>\(x^{4}\)</li><li>\(8x^{6}\)</li><li>\(\frac{b}{2a^{2}}\)</li><li>\(x^{\frac56}\)</li><li>\(a\)</li><li>\(x^{\frac23}\)</li><li>\(8+9-2=15\)</li><li>\(4\times\frac13=\frac43\)</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">3 题</span>
+    <label class="done"><input type="checkbox" id="done-a-frac-4" data-key="a-frac-4"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>Expand and simplify \(\left(x^{\frac12}+x^{-\frac12}\right)^{2}\).</li><li>Given \(2^{a}=3\), find \(8^{a}\) and \(4^{a+1}\).</li><li>Solve \(x^{\frac32}=64\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(x+2+x^{-1}\)</li><li>\(8^{a}=(2^{a})^{3}=27\)；\(4^{a+1}=4\cdot(2^{a})^{2}=36\)</li><li>\(x=64^{\frac23}=16\)</li></ol></details>
+</div>
+</section>
+<section class="topic" id="a-expeq">
+  <header class="topic-head">
+    <p class="unit">Unit 2 · Exploring Space</p>
+    <h3>指数方程 <span class="en">Exponential Equations</span></h3>
+    <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">32 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>把两边化成同一个底数，然后让指数相等</li><li>\(a^{x}=a^{y}\Rightarrow x=y\)</li><li>常用底数：\(4=2^2,\ 8=2^3,\ 16=2^4,\ 9=3^2,\ 27=3^3,\ 25=5^2\)</li><li>含 \(a^{2x}\) 和 \(a^{x}\) 时：设 \(y=a^{x}\)，化成二次方程</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">10 题</span>
+    <label class="done"><input type="checkbox" id="done-a-expeq-0" data-key="a-expeq-0"> 完成</label>
+  </div>
+  <p class="instr">Solve for \(x\).</p>
+  <ol class="qs"><li>\(2^{x}=8\)</li><li>\(3^{x}=81\)</li><li>\(5^{x}=\frac{1}{25}\)</li><li>\(10^{x}=0.001\)</li><li>\(4^{x}=1\)</li><li>\(2^{x}=\frac12\)</li><li>\(9^{x}=3\)</li><li>\(8^{x}=2\)</li><li>\(2^{x+1}=16\)</li><li>\(3^{x-2}=9\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(x=3\)</li><li>\(x=4\)</li><li>\(x=-2\)</li><li>\(x=-3\)</li><li>\(x=0\)</li><li>\(x=-1\)</li><li>\(x=\frac12\)</li><li>\(x=\frac13\)</li><li>\(x=3\)</li><li>\(x=4\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">10 题</span>
+    <label class="done"><input type="checkbox" id="done-a-expeq-1" data-key="a-expeq-1"> 完成</label>
+  </div>
+  <p class="instr">Solve for \(x\).</p>
+  <ol class="qs"><li>\(4^{x}=8\)</li><li>\(9^{x}=27\)</li><li>\(2^{3x-1}=32\)</li><li>\(3^{2x+1}=\frac{1}{27}\)</li><li>\(25^{x}=125\)</li><li>\(8^{x}=16\)</li><li>\(4^{x+1}=8^{x}\)</li><li>\(27^{x}=9^{x+1}\)</li><li>\(\left(\frac12\right)^{x}=16\)</li><li>\(100^{x}=1000\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(2^{2x}=2^{3}\)，\(x=\frac32\)</li><li>\(x=\frac32\)</li><li>\(x=2\)</li><li>\(x=-2\)</li><li>\(x=\frac32\)</li><li>\(x=\frac43\)</li><li>\(x=2\)</li><li>\(x=2\)</li><li>\(x=-4\)</li><li>\(x=\frac32\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-a-expeq-2" data-key="a-expeq-2"> 完成</label>
+  </div>
+  <p class="instr">Solve for \(x\).</p>
+  <ol class="qs"><li>\(5^{x^{2}}=625\)</li><li>\(2^{x^{2}-3x}=\frac14\)</li><li>\(3^{x}\cdot9^{x+1}=27^{2}\)</li><li>\(\dfrac{4^{2x}}{2^{x+3}}=8\)</li><li>\((\sqrt2)^{x}=8\)</li><li>\(2^{x+2}+2^{x}=40\)</li><li>\(3^{x+1}-3^{x}=54\)</li><li>\(16^{x}=\left(\frac18\right)^{x-7}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(x=\pm2\)</li><li>\(x=1\) 或 \(x=2\)</li><li>\(x=\frac43\)</li><li>\(x=2\)</li><li>\(x=6\)</li><li>\(5\cdot2^{x}=40\)，\(x=3\)</li><li>\(2\cdot3^{x}=54\)，\(x=3\)</li><li>\(x=3\)</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-a-expeq-3" data-key="a-expeq-3"> 完成</label>
+  </div>
+  <p class="instr">Use a substitution \(y=a^{x}\) where helpful.</p>
+  <ol class="qs wide"><li>\(4^{x}-6\cdot2^{x}+8=0\)</li><li>\(9^{x}-4\cdot3^{x}+3=0\)</li><li>\(2^{2x+1}-5\cdot2^{x}+2=0\)</li><li>A bacteria colony starts with 500 cells and doubles every 3 hours, so \(N=500\cdot2^{t/3}\). When does it reach 16 000 cells?</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(x=1\) 或 \(x=2\)</li><li>\(x=0\) 或 \(x=1\)</li><li>\(x=1\) 或 \(x=-1\)</li><li>\(2^{t/3}=32\)，\(t=15\) 小时</li></ol></details>
+</div>
+</section>
+<section class="topic" id="a-surds">
+  <header class="topic-head">
+    <p class="unit">Unit 2 · Exploring Space</p>
+    <h3>根式运算 <span class="en">Radicals (Surds)</span></h3>
+    <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">58 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(\sqrt{ab}=\sqrt a\sqrt b\)，\(\sqrt{\frac ab}=\frac{\sqrt a}{\sqrt b}\)</li><li>化简：找出最大的完全平方因数，如 \(\sqrt{72}=\sqrt{36}\sqrt2=6\sqrt2\)</li><li>只有同类根式才能相加减：\(3\sqrt2+5\sqrt2=8\sqrt2\)</li><li>\((a+\sqrt b)(a-\sqrt b)=a^{2}-b\)</li><li>分母有理化：\(\frac{k}{\sqrt b}\cdot\frac{\sqrt b}{\sqrt b}\)；\(\frac{k}{a+\sqrt b}\) 乘以共轭 \(a-\sqrt b\)</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">14 题</span>
+    <label class="done"><input type="checkbox" id="done-a-surds-0" data-key="a-surds-0"> 完成</label>
+  </div>
+  <p class="instr">Simplify.</p>
+  <ol class="qs"><li>\(\sqrt8\)</li><li>\(\sqrt{12}\)</li><li>\(\sqrt{18}\)</li><li>\(\sqrt{20}\)</li><li>\(\sqrt{27}\)</li><li>\(\sqrt{32}\)</li><li>\(\sqrt{45}\)</li><li>\(\sqrt{50}\)</li><li>\(\sqrt{48}\)</li><li>\(\sqrt{72}\)</li><li>\(\sqrt{75}\)</li><li>\(\sqrt{98}\)</li><li>\(\sqrt{200}\)</li><li>\(\sqrt{128}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(2\sqrt2\)</li><li>\(2\sqrt3\)</li><li>\(3\sqrt2\)</li><li>\(2\sqrt5\)</li><li>\(3\sqrt3\)</li><li>\(4\sqrt2\)</li><li>\(3\sqrt5\)</li><li>\(5\sqrt2\)</li><li>\(4\sqrt3\)</li><li>\(6\sqrt2\)</li><li>\(5\sqrt3\)</li><li>\(7\sqrt2\)</li><li>\(10\sqrt2\)</li><li>\(8\sqrt2\)</li></ol></details>
+</div>
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">6 题</span>
+    <label class="done"><input type="checkbox" id="done-a-surds-1" data-key="a-surds-1"> 完成</label>
+  </div>
+  <p class="instr">Simplify.</p>
+  <ol class="qs"><li>\(\sqrt2\cdot\sqrt8\)</li><li>\(\sqrt3\cdot\sqrt{12}\)</li><li>\(\sqrt5\cdot\sqrt5\)</li><li>\(\sqrt6\cdot\sqrt2\)</li><li>\(\dfrac{\sqrt{50}}{\sqrt2}\)</li><li>\(\sqrt3\cdot\sqrt7\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(4\)</li><li>\(6\)</li><li>\(5\)</li><li>\(2\sqrt3\)</li><li>\(5\)</li><li>\(\sqrt{21}\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">10 题</span>
+    <label class="done"><input type="checkbox" id="done-a-surds-2" data-key="a-surds-2"> 完成</label>
+  </div>
+  <p class="instr">Add or subtract. Simplify first.</p>
+  <ol class="qs"><li>\(3\sqrt2+5\sqrt2\)</li><li>\(7\sqrt3-2\sqrt3\)</li><li>\(\sqrt8+\sqrt2\)</li><li>\(\sqrt{12}+\sqrt{27}\)</li><li>\(\sqrt{50}-\sqrt{18}\)</li><li>\(2\sqrt{20}+\sqrt{45}\)</li><li>\(\sqrt{48}-\sqrt{12}+\sqrt3\)</li><li>\(3\sqrt8-2\sqrt{18}\)</li><li>\(\sqrt{75}+\sqrt{12}-\sqrt{27}\)</li><li>\(\sqrt{200}-\sqrt{32}+\sqrt8\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(8\sqrt2\)</li><li>\(5\sqrt3\)</li><li>\(3\sqrt2\)</li><li>\(5\sqrt3\)</li><li>\(2\sqrt2\)</li><li>\(7\sqrt5\)</li><li>\(3\sqrt3\)</li><li>\(0\)</li><li>\(4\sqrt3\)</li><li>\(8\sqrt2\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">10 题</span>
+    <label class="done"><input type="checkbox" id="done-a-surds-3" data-key="a-surds-3"> 完成</label>
+  </div>
+  <p class="instr">Expand and simplify.</p>
+  <ol class="qs"><li>\(2\sqrt3\cdot5\sqrt3\)</li><li>\(3\sqrt2\cdot4\sqrt6\)</li><li>\((\sqrt5)^{3}\)</li><li>\((2\sqrt7)^{2}\)</li><li>\(\sqrt2(\sqrt2+3)\)</li><li>\(\sqrt3(2\sqrt3-\sqrt6)\)</li><li>\((1+\sqrt2)(3+\sqrt2)\)</li><li>\((\sqrt5+2)(\sqrt5-2)\)</li><li>\((3-\sqrt2)^{2}\)</li><li>\((2\sqrt3+1)^{2}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(30\)</li><li>\(24\sqrt3\)</li><li>\(5\sqrt5\)</li><li>\(28\)</li><li>\(2+3\sqrt2\)</li><li>\(6-3\sqrt2\)</li><li>\(5+4\sqrt2\)</li><li>\(1\)</li><li>\(11-6\sqrt2\)</li><li>\(13+4\sqrt3\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">10 题</span>
+    <label class="done"><input type="checkbox" id="done-a-surds-4" data-key="a-surds-4"> 完成</label>
+  </div>
+  <p class="instr">Rationalise the denominator.</p>
+  <ol class="qs"><li>\(\dfrac{1}{\sqrt2}\)</li><li>\(\dfrac{6}{\sqrt3}\)</li><li>\(\dfrac{5}{\sqrt{10}}\)</li><li>\(\dfrac{3}{2\sqrt6}\)</li><li>\(\dfrac{\sqrt2}{\sqrt5}\)</li><li>\(\dfrac{1}{\sqrt3+1}\)</li><li>\(\dfrac{4}{3-\sqrt5}\)</li><li>\(\dfrac{2}{\sqrt5-\sqrt3}\)</li><li>\(\dfrac{\sqrt2+1}{\sqrt2-1}\)</li><li>\(\dfrac{2+\sqrt3}{2-\sqrt3}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(\frac{\sqrt2}{2}\)</li><li>\(2\sqrt3\)</li><li>\(\frac{\sqrt{10}}{2}\)</li><li>\(\frac{\sqrt6}{4}\)</li><li>\(\frac{\sqrt{10}}{5}\)</li><li>\(\frac{\sqrt3-1}{2}\)</li><li>\(3+\sqrt5\)</li><li>\(\sqrt5+\sqrt3\)</li><li>\(3+2\sqrt2\)</li><li>\(7+4\sqrt3\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-a-surds-5" data-key="a-surds-5"> 完成</label>
+  </div>
+  <p class="instr">Problem solving with surds. Give exact answers.</p>
+  <ol class="qs wide"><li>Simplify \((\sqrt3+\sqrt2)^{2}-(\sqrt3-\sqrt2)^{2}\).</li><li>A rectangle is \((3+\sqrt5)\) cm by \((3-\sqrt5)\) cm. Find its area and perimeter.</li><li>A right-angled triangle has legs \(\sqrt8\) and \(\sqrt{12}\). Find the hypotenuse.</li><li>Simplify \(\sqrt{18a^{3}b^{2}}\) for \(a,b>0\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(4\sqrt6\)</li><li>面积 \(4\) cm²，周长 \(12\) cm</li><li>\(\sqrt{20}=2\sqrt5\)</li><li>\(3ab\sqrt{2a}\)</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-a-surds-6" data-key="a-surds-6"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>Show that \(\dfrac{1}{1+\sqrt2}+\dfrac{1}{\sqrt2+\sqrt3}+\dfrac{1}{\sqrt3+2}=1\).</li><li>Simplify \(\sqrt{7+4\sqrt3}\).</li><li>If \(x=2+\sqrt3\), find \(x+\frac1x\) and \(x^{2}+\frac{1}{x^{2}}\).</li><li>A square has a diagonal of 6 cm. Find its exact side length and area.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>逐项有理化：\((\sqrt2-1)+(\sqrt3-\sqrt2)+(2-\sqrt3)=1\)</li><li>\(2+\sqrt3\)（因为 \((2+\sqrt3)^{2}=7+4\sqrt3\)）</li><li>\(\frac1x=2-\sqrt3\)，\(x+\frac1x=4\)；\(x^{2}+\frac1{x^{2}}=4^{2}-2=14\)</li><li>边长 \(3\sqrt2\) cm，面积 18 cm²</li></ol></details>
+</div>
+</section>
+<section class="topic" id="a-mixed">
+  <header class="topic-head">
+    <p class="unit">Unit 2 · Exploring Space</p>
+    <h3>综合测验模拟 <span class="en">Criterion A Mixed Practice</span></h3>
+    <div class="meta"><span class="tag hot">10月21/22日测验前</span><span class="cnt">10 题</span></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>限时 25 分钟、不用计算器，做完再对答案</li><li>每题写出步骤：IB Criterion A 看重过程</li></ul></div>
+  
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">综合</span>
+    <span class="lv-count">10 题</span>
+    <label class="done"><input type="checkbox" id="done-a-mixed-0" data-key="a-mixed-0"> 完成</label>
+  </div>
+  <p class="instr">Show all working.</p>
+  <ol class="qs wide"><li>Evaluate \((2\sqrt3)^{4}\).</li><li>Evaluate \(16^{-\frac34}\times2^{5}\).</li><li>Solve \(9^{x-1}=27^{x}\).</li><li>Write \(8\sqrt2\) as a single power of 2.</li><li>Solve \(4^{x}=\sqrt{32}\).</li><li>Simplify \((x^{\frac23}y^{-1})^{3}\cdot x^{-1}y^{4}\).</li><li>Simplify \(\dfrac{\sqrt{12}+\sqrt3}{\sqrt3}\).</li><li>Calculate \((6.4\times10^{5})\div(8\times10^{-2})\) in scientific notation.</li><li>Rationalise and simplify \(\dfrac{6}{\sqrt{3}}-\sqrt{12}\).</li><li>Solve \(2^{x}\cdot4^{x}=\frac{1}{8}\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(144\)</li><li>\(\frac18\times32=4\)</li><li>\(x=-2\)</li><li>\(2^{\frac72}\)</li><li>\(2^{2x}=2^{\frac52}\)，\(x=\frac54\)</li><li>\(xy\)</li><li>\(3\)</li><li>\(8\times10^{6}\)</li><li>\(0\)</li><li>\(x=-1\)</li></ol></details>
+</div>
+</section>
+<section class="topic" id="a-stats1">
+  <header class="topic-head">
+    <p class="unit">Unit 1 · Statistics（已学，复习）</p>
+    <h3>集中趋势与离散程度 <span class="en">Central Tendency & Spread</span></h3>
+    <div class="meta"><span class="tag">复习</span><span class="cnt">9 题</span></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>平均数 mean = 总和 ÷ 个数；中位数 median = 排序后中间的数；众数 mode = 出现最多</li><li>四分位数：\(Q_1\) = 下半部分的中位数，\(Q_3\) = 上半部分的中位数（n 为奇数时中位数不计入两半）</li><li>\(IQR=Q_3-Q_1\)，极差 range = max − min</li><li>分组数据：用组中值 mid-point 估计平均数</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">2 题</span>
+    <label class="done"><input type="checkbox" id="done-a-stats1-0" data-key="a-stats1-0"> 完成</label>
+  </div>
+  <p class="instr">Find the mean, median, mode and range.</p>
+  <ol class="qs wide"><li>3, 7, 7, 2, 9, 5, 7, 4</li><li>12, 15, 11, 18, 15, 14, 20</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>mean 5.5，median 6，mode 7，range 7</li><li>mean 15，median 15，mode 15，range 9</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-a-stats1-1" data-key="a-stats1-1"> 完成</label>
+  </div>
+  <p class="instr">Find the median, \(Q_1\), \(Q_3\) and IQR.</p>
+  <ol class="qs wide"><li>4, 6, 7, 9, 10, 12, 13, 15, 18, 21, 30</li><li>23, 25, 28, 30, 31, 33, 36, 38, 40, 52</li><li>Number of siblings of 20 students: 0 (×3), 1 (×8), 2 (×6), 3 (×2), 4 (×1). Find the mean, median and mode.</li><li>Heights (cm): \(140\le h\lt150\): 4 students; \(150\le h\lt160\): 10; \(160\le h\lt170\): 12; \(170\le h\lt180\): 4. Estimate the mean; state the modal class and the class containing the median.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>median 12，\(Q_1=7\)，\(Q_3=18\)，IQR 11</li><li>median 32，\(Q_1=28\)，\(Q_3=38\)，IQR 10</li><li>mean 1.5，median 1，mode 1</li><li>估计平均 ≈ 160.3 cm；众数组和中位数组都是 160–170</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">3 题</span>
+    <label class="done"><input type="checkbox" id="done-a-stats1-2" data-key="a-stats1-2"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>A data set has mean 20 and standard deviation 3. Find the new mean and SD if (a) 5 is added to every value, (b) every value is doubled.</li><li>The mean of five numbers is 8. Four of them are 6, 9, 10 and 5. Find the fifth.</li><li>20 students have a mean score of 72. Five more students join with a mean of 82. Find the new mean.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>(a) mean 25，SD 3；(b) mean 40，SD 6</li><li>10</li><li>1850 ÷ 25 = 74</li></ol></details>
+</div>
+</section>
+<section class="topic" id="a-stats2">
+  <header class="topic-head">
+    <p class="unit">Unit 1 · Statistics（已学，复习）</p>
+    <h3>标准差与异常值 <span class="en">Standard Deviation & Outliers</span></h3>
+    <div class="meta"><span class="tag">复习</span><span class="cnt">9 题</span></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(\sigma=\sqrt{\dfrac{\sum (x-\mu)^{2}}{n}}\)（总体标准差，GDC 中的 \(\sigma_x\)）</li><li>标准差越小 → 数据越集中、越稳定</li><li>异常值：小于 \(Q_1-1.5\times IQR\) 或大于 \(Q_3+1.5\times IQR\)</li><li>异常值对平均数影响大，对中位数影响小</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">2 题</span>
+    <label class="done"><input type="checkbox" id="done-a-stats2-0" data-key="a-stats2-0"> 完成</label>
+  </div>
+  <p class="instr">Find the standard deviation by hand (table of \(x-\mu\) and \((x-\mu)^2\)).</p>
+  <ol class="qs wide"><li>2, 4, 6, 8, 10</li><li>5, 5, 5, 5</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(\mu=6\)，\(\sum(x-\mu)^2=40\)，\(\sigma=\sqrt8\approx2.83\)</li><li>\(\sigma=0\)（所有数据相同，没有离散）</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-a-stats2-1" data-key="a-stats2-1"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>Find σ for 3, 5, 6, 9, 12.</li><li>Find σ for 10, 12, 14, 16, 18, 20.</li><li>Class A: mean 70, σ = 5. Class B: mean 70, σ = 15. Which class is more consistent? Explain.</li><li>\(Q_1=20\), \(Q_3=30\). Find the outlier boundaries. Are 48, 4 and 44 outliers?</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(\mu=7\)，\(\sum=50\)，\(\sigma=\sqrt{10}\approx3.16\)</li><li>\(\mu=15\)，\(\sum=70\)，\(\sigma\approx3.42\)</li><li>A 班，标准差更小，成绩更集中</li><li>边界 5 和 45；48 和 4 是异常值，44 不是</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">3 题</span>
+    <label class="done"><input type="checkbox" id="done-a-stats2-2" data-key="a-stats2-2"> 完成</label>
+  </div>
+  <p class="instr">Use your GDC where helpful.</p>
+  <ol class="qs wide"><li>Data: 48, 52, 55, 55, 60, 61, 63, 70, 72, 74. Find the mean and σ. What percentage of values lie within one SD of the mean?</li><li>Data: 2, 15, 17, 18, 19, 20, 21, 22, 24, 45. Find Q1, Q3 and any outliers. Then compare the mean and median with and without the outliers.</li><li>A box plot has min 12, Q1 18, median 25, Q3 30, max 52. Is the maximum an outlier?</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(\mu=61\)，\(\sigma\approx8.35\)；52.65–69.35 之间有 5 个 → 50%</li><li>Q1 = 17，Q3 = 22，IQR 5，边界 9.5 和 29.5 → 异常值 2 和 45。mean 20.3 → 19.5；median 19.5 不变</li><li>IQR 12，上边界 48，52 > 48 → 是异常值</li></ol></details>
+</div>
+</section>
+<section class="topic" id="a-stats3">
+  <header class="topic-head">
+    <p class="unit">Unit 1 · Statistics（已学，复习）</p>
+    <h3>散点图与回归 <span class="en">Scatter Graphs & Regression</span></h3>
+    <div class="meta"><span class="tag">复习</span><span class="cnt">10 题</span></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>描述相关性：方向（正/负）+ 强度（强/中/弱）+ 形式（线性/非线性）</li><li>Pearson \(r\)：\(|r|\) 0–0.25 很弱，0.25–0.5 弱，0.5–0.75 中等，0.75–1 强</li><li>回归直线 \(y=ax+b\)：\(a\) 是每增加 1 个单位 \(x\)，\(y\) 的变化量</li><li>数据范围内预测 = 插值（可靠）；范围外 = 外推（不可靠）</li><li>相关 ≠ 因果</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-a-stats3-0" data-key="a-stats3-0"> 完成</label>
+  </div>
+  <p class="instr">Describe the expected correlation.</p>
+  <ol class="qs wide"><li>Hours studied vs test score</li><li>Outside temperature vs hot chocolate sales</li><li>Shoe size vs score in a maths test</li><li>Ice-cream sales and drownings are positively correlated. Does ice cream cause drowning?</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>强正相关</li><li>负相关</li><li>无相关</li><li>不是，两者都受气温影响（相关 ≠ 因果）</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">3 题</span>
+    <label class="done"><input type="checkbox" id="done-a-stats3-1" data-key="a-stats3-1"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>Describe the correlation for \(r=0.92\), \(r=-0.45\), \(r=0.6\), \(r=-0.05\).</li><li>The regression line for hours studied (\(x\)) and score (\(y\)) is \(y=2.5x+40\). Interpret 2.5 and 40, predict the score for 8 hours, and comment on predicting for 30 hours.</li><li>Using a GDC, find the regression line and \(r\) for \(x\): 2, 4, 5, 7, 8, 10 and \(y\): 15, 22, 26, 33, 35, 44. Predict \(y\) when \(x=6\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>强正相关；弱负相关；中等正相关；几乎没有相关</li><li>每多学 1 小时多 2.5 分；不学习约 40 分；8 小时 → 60 分；30 小时 → 115 分，超出数据范围（外推）且超过满分，不可靠</li><li>\(y\approx3.55x+7.88\)，\(r\approx0.998\)（强正相关）；\(x=6\) 时 \(y\approx29.2\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">3 题</span>
+    <label class="done"><input type="checkbox" id="done-a-stats3-2" data-key="a-stats3-2"> 完成</label>
+  </div>
+  <p class="instr">Choose a model: linear, quadratic or exponential.</p>
+  <ol class="qs wide"><li>Year: 0, 1, 2, 3. Population: 100, 150, 225, 338. Find a model and predict year 5.</li><li>Time (s): 0, 1, 2, 3, 4. Height (m): 0, 15, 20, 15, 0. Find a model.</li><li>Hours: 0, 1, 2. Cost: 5, 8, 11. Find a model.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>每年 ×1.5 → 指数模型 \(P=100\cdot1.5^{t}\)；第 5 年 ≈ 759</li><li>对称 → 二次模型 \(h=-5t^{2}+20t\)</li><li>每小时 +3 → 线性 \(C=3x+5\)</li></ol></details>
+</div>
+</section>
+  </section>
+
+  <section class="part" id="part-b">
+    <div class="part-head"><h2>Part B · Mathematics for Engineering 3</h2><p>三角、函数、向量是后面运动学的基础</p></div>
+    
+<section class="topic" id="b-trig">
+  <header class="topic-head">
+    <p class="unit">Module 1 · Prerequisite Math</p>
+    <h3>三角函数 <span class="en">Trigonometry</span></h3>
+    <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">56 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>SOH CAH TOA：\(\sin\theta=\frac{opp}{hyp}\)，\(\cos\theta=\frac{adj}{hyp}\)，\(\tan\theta=\frac{opp}{adj}\)</li><li>单位圆上的点 \((\cos\theta,\sin\theta)\)</li><li>\(\pi\ \text{rad}=180^\circ\)；度→弧度 \(\times\frac{\pi}{180}\)，弧度→度 \(\times\frac{180}{\pi}\)</li><li>\(\sin^{2}\theta+\cos^{2}\theta=1\)，\(\tan\theta=\frac{\sin\theta}{\cos\theta}\)</li><li>象限符号 ASTC：一象限全正、二象限 sin 正、三象限 tan 正、四象限 cos 正</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-b-trig-0" data-key="b-trig-0"> 完成</label>
+  </div>
+  <p class="instr">Right-angled triangles. Round to 3 s.f. or 2 d.p. where needed.</p>
+  <ol class="qs wide"><li>opp = 3, adj = 4, hyp = 5. Write sin θ, cos θ, tan θ.</li><li>hyp = 10, θ = 30°. Find the opposite side.</li><li>adj = 8, θ = 45°. Find the opposite side.</li><li>hyp = 12, θ = 60°. Find the adjacent side.</li><li>hyp = 20, θ = 35°. Find the opposite side.</li><li>adj = 15, θ = 50°. Find the opposite side.</li><li>opp = 9, hyp = 15. Find θ.</li><li>opp = 7, adj = 7. Find θ.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(\frac35,\ \frac45,\ \frac34\)</li><li>5</li><li>8</li><li>6</li><li>11.47</li><li>17.88</li><li>36.87°</li><li>45°</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">12 题</span>
+    <label class="done"><input type="checkbox" id="done-b-trig-1" data-key="b-trig-1"> 完成</label>
+  </div>
+  <p class="instr">Convert degrees to radians (exact, in terms of π).</p>
+  <ol class="qs"><li>\(180^\circ\)</li><li>\(90^\circ\)</li><li>\(60^\circ\)</li><li>\(45^\circ\)</li><li>\(30^\circ\)</li><li>\(120^\circ\)</li><li>\(135^\circ\)</li><li>\(150^\circ\)</li><li>\(270^\circ\)</li><li>\(360^\circ\)</li><li>\(210^\circ\)</li><li>\(315^\circ\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(\pi\)</li><li>\(\frac{\pi}{2}\)</li><li>\(\frac{\pi}{3}\)</li><li>\(\frac{\pi}{4}\)</li><li>\(\frac{\pi}{6}\)</li><li>\(\frac{2\pi}{3}\)</li><li>\(\frac{3\pi}{4}\)</li><li>\(\frac{5\pi}{6}\)</li><li>\(\frac{3\pi}{2}\)</li><li>\(2\pi\)</li><li>\(\frac{7\pi}{6}\)</li><li>\(\frac{7\pi}{4}\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">6 题</span>
+    <label class="done"><input type="checkbox" id="done-b-trig-2" data-key="b-trig-2"> 完成</label>
+  </div>
+  <p class="instr">Convert radians to degrees.</p>
+  <ol class="qs"><li>\(\frac{\pi}{9}\)</li><li>\(\frac{5\pi}{3}\)</li><li>\(\frac{2\pi}{5}\)</li><li>\(\frac{11\pi}{6}\)</li><li>1 rad</li><li>2.5 rad</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(20^\circ\)</li><li>\(300^\circ\)</li><li>\(72^\circ\)</li><li>\(330^\circ\)</li><li>\(\approx57.3^\circ\)</li><li>\(\approx143.2^\circ\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">18 题</span>
+    <label class="done"><input type="checkbox" id="done-b-trig-3" data-key="b-trig-3"> 完成</label>
+  </div>
+  <p class="instr">Exact values (use the unit circle).</p>
+  <ol class="qs"><li>\(\sin30^\circ\)</li><li>\(\cos60^\circ\)</li><li>\(\tan45^\circ\)</li><li>\(\sin60^\circ\)</li><li>\(\cos45^\circ\)</li><li>\(\tan60^\circ\)</li><li>\(\sin150^\circ\)</li><li>\(\cos120^\circ\)</li><li>\(\sin210^\circ\)</li><li>\(\cos225^\circ\)</li><li>\(\tan135^\circ\)</li><li>\(\sin300^\circ\)</li><li>\(\cos330^\circ\)</li><li>\(\tan240^\circ\)</li><li>\(\sin\pi\)</li><li>\(\cos\frac{3\pi}{2}\)</li><li>\(\sin\frac{5\pi}{4}\)</li><li>\(\tan\frac{7\pi}{6}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(\frac12\)</li><li>\(\frac12\)</li><li>\(1\)</li><li>\(\frac{\sqrt3}{2}\)</li><li>\(\frac{\sqrt2}{2}\)</li><li>\(\sqrt3\)</li><li>\(\frac12\)</li><li>\(-\frac12\)</li><li>\(-\frac12\)</li><li>\(-\frac{\sqrt2}{2}\)</li><li>\(-1\)</li><li>\(-\frac{\sqrt3}{2}\)</li><li>\(\frac{\sqrt3}{2}\)</li><li>\(\sqrt3\)</li><li>\(0\)</li><li>\(0\)</li><li>\(-\frac{\sqrt2}{2}\)</li><li>\(\frac{\sqrt3}{3}\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-b-trig-4" data-key="b-trig-4"> 完成</label>
+  </div>
+  <p class="instr">Identities and equations.</p>
+  <ol class="qs wide"><li>\(\sin\theta=\frac35\) and θ is acute. Find \(\cos\theta\) and \(\tan\theta\).</li><li>\(\cos\theta=-\frac{5}{13}\) and θ is in quadrant II. Find \(\sin\theta\) and \(\tan\theta\).</li><li>Simplify \(\dfrac{1-\cos^{2}\theta}{\sin\theta}\).</li><li>Simplify \(\dfrac{\sin\theta}{\tan\theta}\).</li><li>Show that \((\sin\theta+\cos\theta)^{2}=1+2\sin\theta\cos\theta\).</li><li>Simplify \(\dfrac{\cos^{2}\theta}{1-\sin\theta}\).</li><li>Solve \(\sin\theta=\frac12\) for \(0\le\theta\lt2\pi\).</li><li>Solve \(2\cos\theta+\sqrt3=0\) for \(0^\circ\le\theta\lt360^\circ\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(\cos\theta=\frac45\)，\(\tan\theta=\frac34\)</li><li>\(\sin\theta=\frac{12}{13}\)，\(\tan\theta=-\frac{12}{5}\)</li><li>\(\sin\theta\)</li><li>\(\cos\theta\)</li><li>展开后用 \(\sin^2\theta+\cos^2\theta=1\)</li><li>\(1+\sin\theta\)</li><li>\(\frac{\pi}{6},\ \frac{5\pi}{6}\)</li><li>\(150^\circ,\ 210^\circ\)</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-b-trig-5" data-key="b-trig-5"> 完成</label>
+  </div>
+  <p class="instr">Engineering applications.</p>
+  <ol class="qs wide"><li>A 6 m ladder leans against a wall at 70° to the ground. How high up the wall does it reach?</li><li>A wheelchair ramp must rise 0.8 m and its angle can be at most 5°. Find the minimum horizontal length.</li><li>A wheel of radius 0.3 m turns through 2.5 rad. How far does a point on the rim travel? (\(s=r\theta\))</li><li>Starting from \(\sin^{2}\theta+\cos^{2}\theta=1\), show that \(\tan^{2}\theta+1=\dfrac{1}{\cos^{2}\theta}\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>≈ 5.64 m</li><li>0.8 ÷ tan 5° ≈ 9.14 m</li><li>0.75 m</li><li>两边同除以 \(\cos^{2}\theta\)</li></ol></details>
+</div>
+</section>
+<section class="topic" id="b-func">
+  <header class="topic-head">
+    <p class="unit">Module 1 · Prerequisite Math</p>
+    <h3>函数：一次与二次 <span class="en">Linear & Quadratic Functions</span></h3>
+    <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">30 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>函数：每个输入只对应一个输出</li><li>斜率 \(m=\dfrac{y_2-y_1}{x_2-x_1}\)，直线 \(y=mx+c\)</li><li>平行线斜率相同；垂直线斜率乘积为 −1</li><li>二次函数 \(y=ax^{2}+bx+c\)：顶点 \(x=-\frac{b}{2a}\)</li><li>求根公式 \(x=\dfrac{-b\pm\sqrt{b^{2}-4ac}}{2a}\)；判别式 \(\Delta=b^{2}-4ac\)</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">11 题</span>
+    <label class="done"><input type="checkbox" id="done-b-func-0" data-key="b-func-0"> 完成</label>
+  </div>
+  <p class="instr">Linear functions.</p>
+  <ol class="qs wide"><li>Is \(\{(1,2),(2,3),(1,4)\}\) a function?</li><li>\(f(x)=3x-2\). Find \(f(4)\), \(f(-1)\), \(f(0)\).</li><li>Find the gradient through (1, 3) and (4, 9).</li><li>Find the gradient through (−2, 5) and (2, −3).</li><li>Equation of the line with gradient 4 and y-intercept −1.</li><li>Equation of the line through (2, 7) with gradient 3.</li><li>Equation of the line through (1, 4) and (3, 10).</li><li>x- and y-intercepts of \(y=2x-6\).</li><li>x- and y-intercepts of \(3x+4y=12\).</li><li>Line parallel to \(y=5x+2\) through (1, 1).</li><li>Line perpendicular to \(y=2x+1\) through (4, 3).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>不是，输入 1 对应两个输出</li><li>10，−5，−2</li><li>2</li><li>−2</li><li>\(y=4x-1\)</li><li>\(y=3x+1\)</li><li>\(y=3x+1\)</li><li>(3, 0) 和 (0, −6)</li><li>(4, 0) 和 (0, 3)</li><li>\(y=5x-4\)</li><li>\(y=-\frac12x+5\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">5 题</span>
+    <label class="done"><input type="checkbox" id="done-b-func-1" data-key="b-func-1"> 完成</label>
+  </div>
+  <p class="instr">For each quadratic, find the y-intercept, the roots and the vertex.</p>
+  <ol class="qs wide"><li>\(y=x^{2}-5x+6\)</li><li>\(y=x^{2}-9\)</li><li>\(y=x^{2}+4x\)</li><li>\(y=2x^{2}-8x+6\)</li><li>\(y=-x^{2}+6x-5\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>y 截距 6；根 2, 3；顶点 (2.5, −0.25)</li><li>y 截距 −9；根 ±3；顶点 (0, −9)</li><li>y 截距 0；根 0, −4；顶点 (−2, −4)</li><li>y 截距 6；根 1, 3；顶点 (2, −2)</li><li>y 截距 −5；根 1, 5；顶点 (3, 4) 最大值</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">7 题</span>
+    <label class="done"><input type="checkbox" id="done-b-func-2" data-key="b-func-2"> 完成</label>
+  </div>
+  <p class="instr">Solve.</p>
+  <ol class="qs"><li>\(x^{2}+2x-15=0\)</li><li>\(2x^{2}+5x-3=0\)</li><li>\(x^{2}-4x-1=0\)</li><li>\(3x^{2}-2x-4=0\)</li><li>\(x^{2}-7x+12=0\)</li><li>\(4x^{2}-9=0\)</li><li>How many real roots does \(x^{2}+2x+5=0\) have?</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(x=-5,\ 3\)</li><li>\(x=\frac12,\ -3\)</li><li>\(x=2\pm\sqrt5\)</li><li>\(x=\frac{1\pm\sqrt{13}}{3}\approx1.54,\ -0.869\)</li><li>\(x=3,\ 4\)</li><li>\(x=\pm\frac32\)</li><li>\(\Delta=-16\lt0\)，没有实数根</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">5 题</span>
+    <label class="done"><input type="checkbox" id="done-b-func-3" data-key="b-func-3"> 完成</label>
+  </div>
+  <p class="instr">Modelling with functions.</p>
+  <ol class="qs wide"><li>A spring: force F (N) vs extension x (cm) gives (0, 0), (2, 3), (4, 6), (6, 9). Find F in terms of x and the extension for 12 N.</li><li>A taxi costs \(C=2.5d+24\) HKD for \(d\) km. Find the cost for 10 km and the distance for 74 HKD.</li><li>A ball's height is \(h=-4.9t^{2}+19.6t+1.5\). Find the maximum height and when it hits the ground.</li><li>A farmer has 40 m of fencing for three sides of a rectangle against a wall. Find the maximum area.</li><li>Find the quadratic with roots 2 and −3 that passes through (0, 12).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(F=1.5x\)；8 cm</li><li>49 HKD；20 km</li><li>t = 2 s 时最高 21.1 m；约 4.08 s 落地</li><li>\(A=x(40-2x)\)，\(x=10\) 时最大 200 m²</li><li>\(y=-2(x-2)(x+3)=-2x^{2}-2x+12\)</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">2 题</span>
+    <label class="done"><input type="checkbox" id="done-b-func-4" data-key="b-func-4"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>For which values of \(k\) does \(x^{2}+kx+9=0\) have exactly one root?</li><li>Find where \(y=x^{2}\) meets \(y=x+6\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(k^{2}-36=0\)，\(k=\pm6\)</li><li>(3, 9) 和 (−2, 4)</li></ol></details>
+</div>
+</section>
+<section class="topic" id="b-vec">
+  <header class="topic-head">
+    <p class="unit">Module 1 · Prerequisite Math</p>
+    <h3>坐标与向量 <span class="en">Polar Coordinates & Vectors</span></h3>
+    <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">25 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>极坐标 → 直角坐标：\(x=r\cos\theta\)，\(y=r\sin\theta\)</li><li>直角坐标 → 极坐标：\(r=\sqrt{x^{2}+y^{2}}\)，\(\theta=\tan^{-1}\frac yx\)（注意象限！）</li><li>向量 \(\begin{pmatrix}a\\b\end{pmatrix}\) 的大小 \(\sqrt{a^{2}+b^{2}}\)</li><li>向量加减：对应分量相加减；数乘：每个分量都乘</li><li>矩阵加减：同位置相加减</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">6 题</span>
+    <label class="done"><input type="checkbox" id="done-b-vec-0" data-key="b-vec-0"> 完成</label>
+  </div>
+  <p class="instr">Let \(\mathbf a=\begin{pmatrix}2\\5\end{pmatrix}\), \(\mathbf b=\begin{pmatrix}4\\-1\end{pmatrix}\).</p>
+  <ol class="qs"><li>\(|\begin{pmatrix}3\\4\end{pmatrix}|\)</li><li>\(|\begin{pmatrix}-6\\8\end{pmatrix}|\)</li><li>\(\mathbf a+\mathbf b\)</li><li>\(\mathbf a-\mathbf b\)</li><li>\(3\mathbf a\)</li><li>\(2\mathbf a-3\mathbf b\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>5</li><li>10</li><li>\(\begin{pmatrix}6\\4\end{pmatrix}\)</li><li>\(\begin{pmatrix}-2\\6\end{pmatrix}\)</li><li>\(\begin{pmatrix}6\\15\end{pmatrix}\)</li><li>\(\begin{pmatrix}-8\\13\end{pmatrix}\)</li></ol></details>
+</div>
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">5 题</span>
+    <label class="done"><input type="checkbox" id="done-b-vec-1" data-key="b-vec-1"> 完成</label>
+  </div>
+  <p class="instr">Convert between polar \((r,\theta)\) and Cartesian \((x,y)\).</p>
+  <ol class="qs wide"><li>\((4,\ 30^\circ)\) → Cartesian</li><li>\((10,\ 90^\circ)\) → Cartesian</li><li>\((6,\ 45^\circ)\) → Cartesian</li><li>(1, 1) → polar</li><li>(0, −3) → polar</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\((2\sqrt3,\ 2)\approx(3.46,\ 2)\)</li><li>(0, 10)</li><li>\((3\sqrt2,\ 3\sqrt2)\approx(4.24,\ 4.24)\)</li><li>\((\sqrt2,\ 45^\circ)\)</li><li>\((3,\ 270^\circ)\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-b-vec-2" data-key="b-vec-2"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>\((5,\ 120^\circ)\) → Cartesian</li><li>(−3, 3) → polar</li><li>\((-4,\ -4\sqrt3)\) → polar</li><li>(5, −12) → polar</li><li>A 50 N force acts at 30° above the horizontal. Find its components.</li><li>Forces of 30 N east and 40 N north act on an object. Find the resultant.</li><li>Find the unit vector in the direction of \(\begin{pmatrix}3\\4\end{pmatrix}\).</li><li>\(A=\begin{pmatrix}2&amp;1\\0&amp;3\end{pmatrix}\), \(B=\begin{pmatrix}1&amp;-1\\4&amp;2\end{pmatrix}\). Find \(A+B\), \(2A\), \(A-B\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>(−2.5, 4.33)</li><li>\((3\sqrt2\approx4.24,\ 135^\circ)\)</li><li>\((8,\ 240^\circ)\)</li><li>\((13,\ 292.6^\circ)\)</li><li>(43.3 N, 25 N)</li><li>50 N，东偏北 53.1°</li><li>\(\begin{pmatrix}0.6\\0.8\end{pmatrix}\)</li><li>\(\begin{pmatrix}3&amp;0\\4&amp;5\end{pmatrix}\)，\(\begin{pmatrix}4&amp;2\\0&amp;6\end{pmatrix}\)，\(\begin{pmatrix}1&amp;2\\-4&amp;1\end{pmatrix}\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">5 题</span>
+    <label class="done"><input type="checkbox" id="done-b-vec-3" data-key="b-vec-3"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>A boat heads north at 4 m/s across a river flowing east at 3 m/s. Find the resultant velocity.</li><li>Add the displacements \((8\text{ m},\ 60^\circ)\) and \((5\text{ m},\ 150^\circ)\). Give the answer in polar form.</li><li>Three forces are in equilibrium. \(\mathbf F_1=\begin{pmatrix}3\\5\end{pmatrix}\), \(\mathbf F_2=\begin{pmatrix}-7\\2\end{pmatrix}\). Find \(\mathbf F_3\).</li><li>Find \(k\) if \(\begin{pmatrix}k\\6\end{pmatrix}\) is parallel to \(\begin{pmatrix}2\\3\end{pmatrix}\).</li><li>\(\left|\begin{pmatrix}x\\5\end{pmatrix}\right|=13\). Find \(x\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>5 m/s，北偏东 36.9°</li><li>约 \((9.43\text{ m},\ 92.0^\circ)\)</li><li>\(\begin{pmatrix}4\\-7\end{pmatrix}\)</li><li>k = 4</li><li>\(x=\pm12\)</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">1 题</span>
+    <label class="done"><input type="checkbox" id="done-b-vec-4" data-key="b-vec-4"> 完成</label>
+  </div>
+  <p class="instr">Extension: matrix × vector.</p>
+  <ol class="qs wide"><li>Calculate \(\begin{pmatrix}0&amp;-1\\1&amp;0\end{pmatrix}\begin{pmatrix}3\\2\end{pmatrix}\). What does this matrix do to the vector?</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(\begin{pmatrix}-2\\3\end{pmatrix}\)；逆时针旋转 90°</li></ol></details>
+</div>
+</section>
+<section class="topic" id="b-suvat1">
+  <header class="topic-head">
+    <p class="unit">Module 2 · Motion</p>
+    <h3>一维运动 SUVAT <span class="en">1D SUVAT</span></h3>
+    <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">26 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(s\) 位移，\(u\) 初速度，\(v\) 末速度，\(a\) 加速度，\(t\) 时间（只在加速度恒定时使用）</li><li>\(v=u+at\)　　\(s=ut+\frac12at^{2}\)　　\(v^{2}=u^{2}+2as\)　　\(s=\frac{(u+v)}{2}t\)</li><li>解题步骤：列出已知的三个量 → 写出要求的量 → 选不含第五个量的公式</li><li>s–t 图斜率 = 速度；v–t 图斜率 = 加速度，面积 = 位移</li><li>自由落体 \(a=g=9.8\ \text{m/s}^2\)（有的题用 10）</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">10 题</span>
+    <label class="done"><input type="checkbox" id="done-b-suvat1-0" data-key="b-suvat1-0"> 完成</label>
+  </div>
+  <p class="instr">Write down s, u, v, a, t first, then solve.</p>
+  <ol class="qs wide"><li>A car starts from rest and accelerates at 3 m/s² for 5 s. Find its final speed.</li><li>For the same car, find the distance travelled.</li><li>u = 10 m/s, a = 2 m/s², t = 4 s. Find v.</li><li>u = 20 m/s, v = 0, t = 5 s. Find a.</li><li>A stone is dropped (u = 0). Find the distance fallen in 2 s (g = 9.8).</li><li>u = 5 m/s, v = 15 m/s, t = 4 s. Find s.</li><li>u = 0, v = 20 m/s, s = 50 m. Find a.</li><li>u = 12 m/s, a = −3 m/s², v = 0. Find s.</li><li>Convert 72 km/h to m/s.</li><li>An object moves at a constant 8 m/s for 15 s. Find the distance.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>15 m/s</li><li>37.5 m</li><li>18 m/s</li><li>−4 m/s²</li><li>19.6 m</li><li>40 m</li><li>4 m/s²</li><li>24 m</li><li>20 m/s</li><li>120 m</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-b-suvat1-1" data-key="b-suvat1-1"> 完成</label>
+  </div>
+  <p class="instr">Graphs of motion.</p>
+  <ol class="qs wide"><li>A v–t graph: 0 → 10 m/s in 4 s, constant 10 m/s for 6 s, then down to 0 in 5 s. Find each acceleration and the total displacement.</li><li>An s–t graph is a straight line from (0, 0) to (5 s, 40 m). Find the velocity.</li><li>What does a horizontal line mean on an s–t graph? On a v–t graph?</li><li>Sketch the v–t graph of a ball thrown straight up until it comes back down.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>2.5、0、−2 m/s²；位移 = 面积 = 20 + 60 + 25 = 105 m</li><li>8 m/s</li><li>s–t：静止；v–t：匀速</li><li>一条向下倾斜的直线（斜率 −g），在最高点穿过 v = 0</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-b-suvat1-2" data-key="b-suvat1-2"> 完成</label>
+  </div>
+  <p class="instr">Multi-step SUVAT problems.</p>
+  <ol class="qs wide"><li>A car at 25 m/s brakes at −5 m/s². Find the stopping distance and time.</li><li>A train at 15 m/s accelerates at 0.5 m/s² for 20 s. Find v and s.</li><li>A ball is dropped from 45 m (g = 10). Find the time to fall and impact speed.</li><li>A ball is thrown up at 20 m/s (g = 9.8). Find the max height, time to the top and total time in the air.</li><li>A cyclist slows from 12 m/s to 4 m/s over 32 m. Find the deceleration.</li><li>u = 3 m/s, a = 2 m/s², s = 40 m. Find v and t.</li><li>A driver at 20 m/s has a reaction time of 0.8 s, then brakes at −8 m/s². Find the total stopping distance.</li><li>A stone is thrown down at 5 m/s from a 30 m bridge (g = 9.8). Find its impact speed and time.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>62.5 m，5 s</li><li>25 m/s，400 m</li><li>3 s，30 m/s</li><li>20.4 m，2.04 s，4.08 s</li><li>a = −2 m/s²</li><li>13 m/s，5 s</li><li>16 + 25 = 41 m</li><li>≈ 24.8 m/s，≈ 2.02 s</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-b-suvat1-3" data-key="b-suvat1-3"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>Car A starts from rest with a = 2 m/s² just as car B passes at a constant 16 m/s. When and where does A catch B?</li><li>A ball is thrown up at 15 m/s from the edge of a 10 m cliff and lands at the bottom (g = 9.8). Find the time of flight.</li><li>Derive \(v^{2}=u^{2}+2as\) from \(v=u+at\) and \(s=\frac{u+v}{2}t\).</li><li>A lift accelerates up from rest at 1.5 m/s² for 2 s, moves steadily for 4 s, then slows to rest in 3 s. Find the distance travelled.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(t^{2}=16t\) → 16 s，256 m</li><li>\(-10=15t-4.9t^{2}\)，\(t\approx3.62\) s</li><li>由第一式 \(t=\frac{v-u}{a}\)，代入第二式得 \(2as=v^{2}-u^{2}\)</li><li>最大速度 3 m/s；3 + 12 + 4.5 = 19.5 m</li></ol></details>
+</div>
+</section>
+<section class="topic" id="b-suvat2">
+  <header class="topic-head">
+    <p class="unit">Module 2 · Motion</p>
+    <h3>二维运动与抛体 <span class="en">2D SUVAT & Projectiles</span></h3>
+    <div class="meta"><span class="tag">对应发射器项目</span><span class="cnt">14 题</span></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>水平和竖直方向独立：水平 \(a=0\)，竖直 \(a=-g\)；时间 \(t\) 是两个方向的桥梁</li><li>分解初速度：\(u_x=u\cos\theta\)，\(u_y=u\sin\theta\)</li><li>同一高度落地：飞行时间 \(T=\dfrac{2u\sin\theta}{g}\)，射程 \(R=\dfrac{u^{2}\sin2\theta}{g}\)，最大高度 \(H=\dfrac{u^{2}\sin^{2}\theta}{2g}\)</li><li>45° 射程最远；互余的两个角（如 30° 和 60°）射程相同</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-b-suvat2-0" data-key="b-suvat2-0"> 完成</label>
+  </div>
+  <p class="instr">Horizontal launches and components.</p>
+  <ol class="qs wide"><li>A ball rolls off a 1.25 m high table at 2 m/s (g = 10). Find the time in the air and the horizontal distance.</li><li>A stone is thrown horizontally at 15 m/s from a 20 m cliff (g = 10). Find the time, horizontal distance and impact speed.</li><li>u = 20 m/s at 30°. Find the horizontal and vertical components.</li><li>u = 10 m/s at 60°. Find the components.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>0.5 s，1 m</li><li>2 s，30 m，竖直速度 20 m/s → 合速度 25 m/s</li><li>17.3 m/s，10 m/s</li><li>5 m/s，8.66 m/s</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">6 题</span>
+    <label class="done"><input type="checkbox" id="done-b-suvat2-1" data-key="b-suvat2-1"> 完成</label>
+  </div>
+  <p class="instr">Launch and landing at the same height (g = 9.8).</p>
+  <ol class="qs wide"><li>u = 20 m/s at 45°. Find T, R and H.</li><li>u = 15 m/s at 30°. Find T, R and H.</li><li>Show that launch angles of 30° and 60° give the same range.</li><li>Your marble launcher fires at 45°. What launch speed lands it exactly 2 m away?</li><li>The same target at 30°. What launch speed is needed?</li><li>A test shot at 45° lands 1.6 m away. Find the launch speed.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>T ≈ 2.89 s，R ≈ 40.8 m，H ≈ 10.2 m</li><li>T ≈ 1.53 s，R ≈ 19.9 m，H ≈ 2.87 m</li><li>\(\sin60^\circ=\sin120^\circ\)</li><li>\(u^{2}=2\times9.8\)，\(u\approx4.43\) m/s</li><li>≈ 4.76 m/s</li><li>≈ 3.96 m/s</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-b-suvat2-2" data-key="b-suvat2-2"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>A marble is fired horizontally from a 0.8 m table and lands 2.0 m from the table edge. Find its launch speed. (This is one way to measure your launcher's speed.)</li><li>A ball is kicked at 25 m/s at 40°. Does it clear a 3 m wall 30 m away?</li><li>Derive \(R=\dfrac{u^{2}\sin2\theta}{g}\).</li><li>A ball is launched from 1 m above the floor at 6 m/s, 30° above horizontal. Find the horizontal distance to landing.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(t=\sqrt{\frac{2\times0.8}{9.8}}\approx0.404\) s，\(u=\frac{2.0}{0.404}\approx4.95\) m/s</li><li>到达墙时 t ≈ 1.57 s，高度 ≈ 13.2 m > 3 m，能越过</li><li>\(T=\frac{2u\sin\theta}{g}\)，\(R=u\cos\theta\cdot T\)，再用 \(2\sin\theta\cos\theta=\sin2\theta\)</li><li>\(4.9t^{2}-3t-1=0\)，\(t\approx0.852\) s，距离 ≈ 4.43 m</li></ol></details>
+</div>
+</section>
+<section class="topic" id="b-binary">
+  <header class="topic-head">
+    <p class="unit">课外补充 · Rainy Day</p>
+    <h3>二进制与十六进制 <span class="en">Binary & Hexadecimal</span></h3>
+    <div class="meta"><span class="tag">补充</span><span class="cnt">13 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>二进制位值：…, 128, 64, 32, 16, 8, 4, 2, 1</li><li>十六进制：0–9，A=10, B=11, C=12, D=13, E=14, F=15；位值 …, 256, 16, 1</li><li>每 4 位二进制 = 1 位十六进制</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">6 题</span>
+    <label class="done"><input type="checkbox" id="done-b-binary-0" data-key="b-binary-0"> 完成</label>
+  </div>
+  <p class="instr">Convert.</p>
+  <ol class="qs"><li>\(1011_2\) → decimal</li><li>\(11010_2\) → decimal</li><li>\(11111111_2\) → decimal</li><li>13 → binary</li><li>37 → binary</li><li>100 → binary</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>11</li><li>26</li><li>255</li><li>1101</li><li>100101</li><li>1100100</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">7 题</span>
+    <label class="done"><input type="checkbox" id="done-b-binary-1" data-key="b-binary-1"> 完成</label>
+  </div>
+  <p class="instr">Convert.</p>
+  <ol class="qs"><li>\(2F_{16}\) → decimal</li><li>\(FF_{16}\) → decimal</li><li>\(1A3_{16}\) → decimal</li><li>200 → hex</li><li>75 → hex</li><li>\(10111100_2\) → hex</li><li>\(1011_2+0110_2\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>47</li><li>255</li><li>419</li><li>C8</li><li>4B</li><li>BC</li><li>\(10001_2\)</li></ol></details>
+</div>
+</section>
+  </section>
+
+  <section class="part" id="drills">
+    <div class="part-head"><h2>随机练习 Drills</h2><p>每点一次“换一组”生成 8 道新题</p></div>
+    <p class="drill-intro">题目由程序随机生成，题型和测验一致。先在本子上写完全部 8 题，再点“显示答案”。</p>
+    <div class="drill-grid" id="drill-grid"></div>
+  </section>
+
+  <footer>
+    数值答案一般保留 3 位有效数字或 2 位小数；没有特别说明时 g = 9.8 m/s²。统计题的四分位数用 IB/GDC 方法（n 为奇数时中位数不计入两半）。题目内容依据 Moodle 课程页面（2026 年 10 月 4 日查看）。
+  </footer>
+</main>
+
+<script>
+// Randomised drill generators. Each returns {q, a} as HTML with \( \) math.
+const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; };
+const M = s => `\\(${s}\\)`;
+const co = c => c === 1 ? '' : c === -1 ? '-' : String(c);
+const pw = (v, e) => e === 0 ? '' : e === 1 ? v : `${v}^{${e}}`;
+function term(c, vars) {
+  const body = vars.map(([v, e]) => pw(v, e)).join('');
+  if (!body) return String(c);
+  return co(c) + body;
+}
+function frac(n, d) {           // reduced fraction as TeX
+  if (d < 0) { n = -n; d = -d; }
+  const g = gcd(n, d); n /= g; d /= g;
+  if (d === 1) return String(n);
+  return (n < 0 ? '-' : '') + `\\frac{${Math.abs(n)}}{${d}}`;
+}
+function fmtNum(x) { return String(parseFloat(x.toFixed(6))); }
+function surd(c, s) {           // c√s
+  if (c === 0) return '0';
+  return `${co(c)}\\sqrt{${s}}`;
+}
+function surdExpr(R, C, s) {    // R + C√s
+  if (C === 0) return String(R);
+  if (R === 0) return surd(C, s);
+  const abs = Math.abs(C);
+  return `${R} ${C > 0 ? '+' : '-'} ${abs === 1 ? '' : abs}\\sqrt{${s}}`;
+}
+const VARS = ['x', 'a', 'm', 'y', 'p', 'n'];
+
+const DRILLS = {
+  laws: {
+    title: '指数法则', en: 'Laws of exponents', instr: 'Simplify.',
+    gen() {
+      const v = pick(VARS), t = ri(1, 4);
+      if (t === 1) {
+        const c1 = ri(1, 6), c2 = ri(1, 6) * pick([1, 1, -1]), m = ri(2, 9), n = ri(1, 8);
+        return { q: M(`${term(c1, [[v, m]])}\\cdot ${c2 < 0 ? '(' + term(c2, [[v, n]]) + ')' : term(c2, [[v, n]])}`), a: M(term(c1 * c2, [[v, m + n]])) };
+      }
+      if (t === 2) {
+        const c2 = ri(1, 6), k = ri(1, 6), m = ri(5, 12), n = ri(1, m - 1);
+        return { q: M(`\\dfrac{${term(c2 * k, [[v, m]])}}{${term(c2, [[v, n]])}}`), a: M(term(k, [[v, m - n]])) };
+      }
+      if (t === 3) {
+        const c = ri(1, 4) * pick([1, 1, -1]), m = ri(2, 5), n = ri(2, 4);
+        return { q: M(`(${term(c, [[v, m]])})^{${n}}`), a: M(term(c ** n, [[v, m * n]])) };
+      }
+      const c = ri(1, 5), sq = c * c;
+      const divs = []; for (let d = 1; d <= sq; d++) if (sq % d === 0) divs.push(d);
+      const d = pick(divs), m = ri(1, 4), n = ri(1, 4), p = ri(1, 2 * m), q = ri(1, 2 * n);
+      return { q: M(`\\dfrac{(${term(c, [['x', m], ['y', n]])})^{2}}{${term(d, [['x', p], ['y', q]])}}`), a: M(term(sq / d, [['x', 2 * m - p], ['y', 2 * n - q]])) };
+    }
+  },
+  frac: {
+    title: '负指数与分数指数', en: 'Negative & fractional indices', instr: 'Evaluate.',
+    gen() {
+      const opts = { 2: [1, 2, 3, 4, 5], 3: [1, 2, 3, 4], 4: [1, 2, 3], 5: [1, 2, 3], 10: [1, 2, 3] };
+      const r = pick([2, 3, 4, 5, 10]), qd = pick(opts[r]), base = r ** qd;
+      let p = 0;
+      if (Math.random() > 0.08) { const lim = []; for (let k = 1; k <= 4; k++) if (r ** k <= 1000) lim.push(k); p = pick(lim) * pick([1, -1]); }
+      const g = gcd(p, qd), pn = p / g, qn = qd / g;
+      const exp = p === 0 ? '0' : qn === 1 ? String(pn) : (pn < 0 ? '-' : '') + `\\frac{${Math.abs(pn)}}{${qn}}`;
+      const recip = Math.random() < 0.25 && base > 1;
+      const b = recip ? `\\left(\\dfrac{1}{${base}}\\right)` : String(base);
+      const e = recip ? -p : p;      // value = r^e
+      const val = e === 0 ? '1' : e > 0 ? String(r ** e) : `\\dfrac{1}{${r ** -e}}`;
+      return { q: M(`${b}^{${exp}}`), a: M(val) };
+    }
+  },
+  sci: {
+    title: '科学记数法', en: 'Scientific notation', instr: 'Calculate. Answer in scientific notation (3 s.f.).',
+    gen() {
+      const t = ri(1, 3);
+      if (t === 1) {
+        const k1 = ri(11, 99), k2 = ri(11, 99), e1 = ri(-8, 9), e2 = ri(-8, 9);
+        let prod = k1 * k2, e = e1 + e2, man;
+        if (prod >= 1000) { man = prod / 1000; e += 1; } else man = prod / 100;
+        return { q: M(`(${fmtNum(k1 / 10)}\\times10^{${e1}})\\times(${fmtNum(k2 / 10)}\\times10^{${e2}})`), a: M(`${fmtNum(Number(man.toPrecision(3)))}\\times10^{${e}}`) };
+      }
+      if (t === 2) {
+        const rInt = ri(11, 99), a2 = ri(2, 9), e1 = ri(-8, 9), e2 = ri(-8, 9);
+        const a1Int = rInt * a2; let a1 = a1Int / 10, E1 = e1;
+        if (a1 >= 10) { a1 = a1Int / 100; E1 = e1 + 1; }
+        return { q: M(`\\dfrac{${fmtNum(a1)}\\times10^{${E1}}}{${a2}\\times10^{${e2}}}`), a: M(`${fmtNum(rInt / 10)}\\times10^{${e1 - e2}}`) };
+      }
+      let digits = ri(11, 999); while (digits % 10 === 0) digits = ri(11, 999);
+      const nd = String(digits).length, e = ri(-6, 9);
+      const man = digits / 10 ** (nd - 1);
+      const ordinary = new Intl.NumberFormat('en-US', { maximumSignificantDigits: nd, useGrouping: true, maximumFractionDigits: 12 }).format(man * 10 ** e).replace(/,/g, '\\,');
+      return Math.random() < 0.5
+        ? { q: `Write ${M(ordinary)} in scientific notation.`, a: M(`${fmtNum(man)}\\times10^{${e}}`) }
+        : { q: `Write ${M(`${fmtNum(man)}\\times10^{${e}}`)} as an ordinary number.`, a: M(ordinary) };
+    }
+  },
+  expeq: {
+    title: '指数方程', en: 'Exponential equations', instr: 'Solve for x.',
+    gen() {
+      const t = ri(1, 3);
+      const show = (b, k) => k >= 0 ? String(b ** k) : `\\frac{1}{${b ** -k}}`;
+      if (t === 1) {
+        let b, x0, p, q, k;
+        do { b = pick([2, 3, 5]); x0 = ri(-3, 4); p = ri(1, 3); q = ri(-4, 4); k = p * x0 + q; } while (b ** Math.abs(k) > 1000);
+        const lin = `${co(p)}x${q > 0 ? '+' + q : q < 0 ? q : ''}`;
+        return { q: M(`${b}^{${lin}}=${show(b, k)}`), a: M(`x=${x0}`) };
+      }
+      if (t === 2) {
+        let r, m, n;
+        do { r = pick([2, 3]); m = ri(1, 3); n = ri(-4, 5); } while (n === 0 || r ** Math.abs(n) > 243 || (m === 1 && Math.random() < 0.7));
+        return { q: M(`${r ** m}^{x}=${show(r, n)}`), a: M(`x=${frac(n, m)}`) };
+      }
+      let r, m, n, al;
+      do { r = pick([2, 3]); m = ri(1, 3); n = ri(1, 3); al = ri(1, 3) * pick([1, -1]); } while (m === n);
+      const lin = `x${al > 0 ? '+' + al : al}`;
+      return { q: M(`${r ** m}^{${lin}}=${r ** n}^{x}`), a: M(`x=${frac(m * al, n - m)}`) };
+    }
+  },
+  surdS: {
+    title: '根式化简', en: 'Simplify surds', instr: 'Simplify.',
+    gen() {
+      const s = pick([2, 3, 5, 6, 7, 10, 11]), k = ri(2, 10), c = Math.random() < 0.3 ? ri(2, 5) : 1;
+      return { q: M(`${co(c)}\\sqrt{${k * k * s}}`), a: M(surd(c * k, s)) };
+    }
+  },
+  surdA: {
+    title: '根式加减', en: 'Add & subtract surds', instr: 'Simplify.',
+    gen() {
+      const s = pick([2, 3, 5, 6, 7]);
+      let k1 = ri(1, 6), k2 = ri(1, 6); while (k2 === k1) k2 = ri(1, 6);
+      const a = ri(1, 4), b = ri(1, 4), sg = pick([1, -1]);
+      const R = a * k1 + sg * b * k2;
+      return { q: M(`${co(a)}\\sqrt{${k1 * k1 * s}} ${sg > 0 ? '+' : '-'} ${co(b)}\\sqrt{${k2 * k2 * s}}`), a: M(surd(R, s)) };
+    }
+  },
+  surdM: {
+    title: '根式乘法展开', en: 'Expand surd brackets', instr: 'Expand and simplify.',
+    gen() {
+      const s = pick([2, 3, 5, 7]), a = ri(1, 6), b = ri(1, 6), c = pick([1, -1, 2, -2]);
+      const R = a * b + c * s, C = a * c + b;
+      const cAbs = Math.abs(c);
+      return { q: M(`(${a}+\\sqrt{${s}})(${b}${c > 0 ? '+' : '-'}${cAbs === 1 ? '' : cAbs}\\sqrt{${s}})`), a: M(surdExpr(R, C, s)) };
+    }
+  },
+  surdR: {
+    title: '分母有理化', en: 'Rationalise the denominator', instr: 'Rationalise and simplify.',
+    gen() {
+      if (Math.random() < 0.5) {
+        const s = pick([2, 3, 5, 6, 7, 10]), a = ri(1, 12), b = ri(1, 3);
+        const g = gcd(a, b * s), num = a / g, den = b * s / g;
+        const ans = den === 1 ? surd(num, s) : `\\dfrac{${co(num)}\\sqrt{${s}}}{${den}}`;
+        return { q: M(`\\dfrac{${a}}{${co(b)}\\sqrt{${s}}}`), a: M(ans) };
+      }
+      let s, d, D;
+      do { s = pick([2, 3, 5, 6, 7, 10, 11]); d = ri(1, 3); D = s - d * d; } while (D === 0);
+      const c = Math.abs(D) * ri(1, 3), m = c / D, plus = Math.random() < 0.5;
+      // c/(√s ± d) = m(√s ∓ d)
+      const R = plus ? -m * d : m * d;
+      return { q: M(`\\dfrac{${c}}{\\sqrt{${s}}${plus ? '+' : '-'}${d}}`), a: M(surdExpr(R, m, s)) };
+    }
+  },
+  quad: {
+    title: '解一元二次方程', en: 'Solve quadratics by factorising', instr: 'Solve.',
+    gen() {
+      let p, r, s;
+      do { p = pick([1, 1, 1, 2, 3]); r = ri(-6, 6); s = ri(-6, 6); } while (r === 0 && s === 0);
+      // (px - r)(x - s) = px² - (ps + r)x + rs
+      const B = -(p * s + r), C = r * s;
+      const tx = (c, x, first) => c === 0 ? '' : (c > 0 ? (first ? '' : '+') : '-') + (Math.abs(c) === 1 && x ? '' : Math.abs(c)) + x;
+      const eq = `${co(p)}x^{2}${tx(B, 'x', false)}${tx(C, '', false)}=0`;
+      const roots = [...new Set([frac(r, p), String(s)])];
+      return { q: M(eq), a: M(`x=${roots.join(',\\ ')}`) };
+    }
+  },
+  degrad: {
+    title: '角度与弧度', en: 'Degrees ↔ radians', instr: 'Convert.',
+    gen() {
+      const deg = 15 * ri(1, 24), g = gcd(deg / 15, 12), num = deg / 15 / g, den = 12 / g;
+      const rad = den === 1 ? `${co(num)}\\pi` : `\\dfrac{${co(num)}\\pi}{${den}}`;
+      return Math.random() < 0.5 ? { q: M(`${deg}^\\circ`) + ' → rad', a: M(rad) } : { q: M(rad) + ' → °', a: M(`${deg}^\\circ`) };
+    }
+  },
+  unit: {
+    title: '单位圆特殊角', en: 'Exact trig values', instr: 'Find the exact value.',
+    gen() {
+      const h = '\\frac12', r2 = '\\frac{\\sqrt2}{2}', r3 = '\\frac{\\sqrt3}{2}', t3 = '\\frac{\\sqrt3}{3}';
+      const T = {
+        0: ['0', '1', '0'], 30: [h, r3, t3], 45: [r2, r2, '1'], 60: [r3, h, '\\sqrt3'], 90: ['1', '0', '\\text{undefined}'],
+        120: [r3, '-' + h, '-\\sqrt3'], 135: [r2, '-' + r2, '-1'], 150: [h, '-' + r3, '-' + t3], 180: ['0', '-1', '0'],
+        210: ['-' + h, '-' + r3, t3], 225: ['-' + r2, '-' + r2, '1'], 240: ['-' + r3, '-' + h, '\\sqrt3'], 270: ['-1', '0', '\\text{undefined}'],
+        300: ['-' + r3, h, '-\\sqrt3'], 315: ['-' + r2, r2, '-1'], 330: ['-' + h, r3, '-' + t3]
+      };
+      const deg = Number(pick(Object.keys(T))), f = ri(0, 2), fn = ['\\sin', '\\cos', '\\tan'][f];
+      let ang = `${deg}^\\circ`;
+      if (Math.random() < 0.5) {
+        const g = gcd(deg, 180), n = deg / g, d = 180 / g;
+        ang = deg === 0 ? '0' : d === 1 ? `${co(n)}\\pi` : `\\frac{${co(n)}\\pi}{${d}}`;
+      }
+      return { q: M(`${fn}\\left(${ang}\\right)`), a: M(T[deg][f]) };
+    }
+  },
+  polar: {
+    title: '极坐标与直角坐标', en: 'Polar ↔ Cartesian', instr: 'Convert. Round to 2 d.p.',
+    gen() {
+      if (Math.random() < 0.5) {
+        const r = pick([2, 4, 5, 6, 8, 10, 12]), th = pick([30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330]);
+        const x = r * Math.cos(th * Math.PI / 180), y = r * Math.sin(th * Math.PI / 180);
+        return { q: M(`(${r},\\ ${th}^\\circ)`) + ' → (x, y)', a: M(`(${x.toFixed(2)},\\ ${y.toFixed(2)})`) };
+      }
+      let x, y; do { x = ri(-9, 9); y = ri(-9, 9); } while (x === 0 && y === 0);
+      let th = Math.atan2(y, x) * 180 / Math.PI; if (th < 0) th += 360;
+      return { q: M(`(${x},\\ ${y})`) + ' → (r, θ)', a: M(`(${Math.hypot(x, y).toFixed(2)},\\ ${th.toFixed(1)}^\\circ)`) };
+    }
+  },
+  suvat: {
+    title: 'SUVAT 运动公式', en: 'SUVAT', instr: 'Write s, u, v, a, t first. Round to 2 d.p.',
+    gen() {
+      const t = ri(1, 4), f = x => fmtNum(Number(x.toFixed(2)));
+      if (t === 1) {
+        const a = ri(1, 5) * pick([1, 1, -1]), u = a < 0 ? ri(-a, 25) : ri(0, 20);
+        const tt = a < 0 ? ri(1, Math.floor(u / -a)) : ri(1, 10);
+        return { q: `u = ${u} m/s, a = ${a} m/s², t = ${tt} s. Find v and s.`, a: `v = ${f(u + a * tt)} m/s，s = ${f(u * tt + 0.5 * a * tt * tt)} m` };
+      }
+      if (t === 2) {
+        let u = ri(0, 25), v = ri(0, 30); while (v === u) v = ri(0, 30);
+        const a = (v > u ? 1 : -1) * ri(1, 5);
+        return { q: `u = ${u} m/s, v = ${v} m/s, a = ${a} m/s². Find s.`, a: `s = ${f((v * v - u * u) / (2 * a))} m` };
+      }
+      if (t === 3) {
+        const u = ri(0, 20), v = ri(0, 30), tt = ri(2, 10);
+        return { q: `u = ${u} m/s, v = ${v} m/s, t = ${tt} s. Find a and s.`, a: `a = ${f((v - u) / tt)} m/s²，s = ${f((u + v) / 2 * tt)} m` };
+      }
+      const h = ri(2, 80);
+      return { q: `A stone is dropped from ${h} m (g = 9.8 m/s²). Find the time to fall and impact speed.`, a: `t = ${f(Math.sqrt(2 * h / 9.8))} s，v = ${f(Math.sqrt(2 * 9.8 * h))} m/s` };
+    }
+  },
+  base: {
+    title: '二进制与十六进制', en: 'Binary & hex', instr: 'Convert.',
+    gen() {
+      const n = ri(5, 255), t = ri(1, 5), B = n.toString(2), H = n.toString(16).toUpperCase();
+      return [
+        { q: `${n} → binary`, a: B }, { q: M(`${B}_2`) + ' → decimal', a: String(n) },
+        { q: `${n} → hex`, a: H }, { q: M(`\\text{${H}}_{16}`) + ' → decimal', a: String(n) },
+        { q: M(`${B}_2`) + ' → hex', a: H }
+      ][t - 1];
+    }
+  }
+};
+if (typeof module !== 'undefined') module.exports = DRILLS;
+
+</script>
+<script>
+(function () {
+  // completion checkboxes, saved per browser
+  const KEY = 'isabelle-g9-done';
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+  document.querySelectorAll('.done input').forEach(cb => {
+    const lv = cb.closest('.level');
+    cb.checked = !!saved[cb.dataset.key];
+    lv.classList.toggle('is-done', cb.checked);
+    cb.addEventListener('change', () => {
+      saved[cb.dataset.key] = cb.checked;
+      lv.classList.toggle('is-done', cb.checked);
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+    });
+  });
+
+  // countdown
+  const days = Math.ceil((new Date(2026, 9, 21) - new Date()) / 86400000);
+  const cd = document.getElementById('countdown');
+  if (days > 0) cd.textContent = `距离测验还有 ${days} 天。`;
+
+  // drills
+  const typeset = el => { if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]).catch(() => {}); };
+  const grid = document.getElementById('drill-grid');
+  const ORDER = ['laws', 'frac', 'sci', 'expeq', 'surdS', 'surdA', 'surdM', 'surdR', 'degrad', 'unit', 'quad', 'polar', 'suvat', 'base'];
+  ORDER.forEach(k => {
+    const d = DRILLS[k];
+    const card = document.createElement('div');
+    card.className = 'drill';
+    card.innerHTML = `<h4>${d.title}</h4><span class="en">${d.en}</span><p class="instr">${d.instr}</p><ol class="qs"></ol>
+      <div class="bar"><button type="button" class="new" id="new-${k}">换一组</button><button type="button" class="ghost tog" id="tog-${k}">显示答案</button><span class="round"></span></div>`;
+    const ol = card.querySelector('ol'), tog = card.querySelector('.tog'), round = card.querySelector('.round');
+    let n = 0;
+    const fill = () => {
+      const seen = new Set(); const items = [];
+      let guard = 0;
+      while (items.length < 8 && guard++ < 200) { const it = d.gen(); if (!seen.has(it.q)) { seen.add(it.q); items.push(it); } }
+      ol.innerHTML = items.map(it => `<li><span class="q">${it.q}</span><span class="a">${it.a}</span></li>`).join('');
+      card.classList.remove('show'); tog.textContent = '显示答案';
+      round.textContent = `第 ${++n} 组`;
+      typeset(ol);
+    };
+    card.querySelector('.new').addEventListener('click', fill);
+    tog.addEventListener('click', () => { const s = card.classList.toggle('show'); tog.textContent = s ? '隐藏答案' : '显示答案'; });
+    grid.appendChild(card);
+    fill();
+  });
+})();
+</script>
+
+</body></html>
