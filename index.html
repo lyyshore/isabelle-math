@@ -95,6 +95,11 @@ h1 { font: 700 clamp(30px, 6vw, 46px)/1.08 var(--display); margin: 0 0 10px; tex
 .tag { font: 500 11px/1 var(--mono); padding: 5px 8px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
 .tag.hot { background: var(--amber-soft); color: var(--amber); }
 .to-drill { font-size: 13px; margin-left: auto; text-decoration: none; }
+.explain { margin: 16px 0 0; padding: 14px 16px; background: var(--accent-soft); border-radius: 8px; font-size: 14.5px; }
+.explain p { margin: 0; max-width: 70ch; }
+.explain p + p { margin-top: 8px; }
+.explain .ex { padding-top: 8px; border-top: 1px dashed color-mix(in srgb, var(--accent) 30%, transparent); }
+.explain .ex b { font: 500 11px/1 var(--mono); color: var(--card); background: var(--accent); padding: 3px 6px; border-radius: 4px; margin-right: 8px; letter-spacing: .04em; }
 .key { margin: 16px 0 6px; padding: 12px 16px; background: var(--card); border: 1px dashed var(--line); border-radius: 8px; }
 .key-label { font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
 .key ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; font-size: 14px; }
@@ -128,7 +133,7 @@ details.ans > ol > li::before { color: var(--accent); }
 
 /* drills */
 .drill-intro { color: var(--muted); font-size: 14px; max-width: 64ch; margin: 10px 0 0; }
-.drill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 18px; }
+.drill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; margin-top: 18px; }
 .drill { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; min-width: 0; display: flex; flex-direction: column; }
 .drill h4 { font: 700 16px/1.25 var(--display); margin: 0; }
 .drill .en { font-size: 12px; color: var(--muted); }
@@ -144,6 +149,8 @@ button:hover { filter: brightness(1.08); }
 
 footer { padding-block: 40px; color: var(--muted); font-size: 13px; }
 mjx-container { max-width: 100%; }
+.key li, .explain p { min-width: 0; overflow-x: auto; overflow-y: hidden; }
+.key ul { min-width: 0; }
 @media (max-width: 520px) { ol.qs { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); } .to-drill { margin-left: 0; } }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 html { scroll-behavior: smooth; }
@@ -170,9 +177,9 @@ window.MathJax = {
     <h1>Isabelle 的 G9 数学练习册</h1>
     <p class="sub">根据 Moodle 上 <b>G09 Extended Mathematics 4</b> 和 <b>G09 Shuyuan Mathematics for Engineering 3</b> 两门课的本学期内容整理。每个知识点从基础到挑战分级；需要熟练掌握的计算点另有可无限刷新的随机练习。</p>
     <div class="stats">
-      <span><b>455</b>道分级题</span>
-      <span><b>14</b>类随机练习（每组 8 题，可无限换）</span>
-      <span><b>17</b>个知识点</span>
+      <span><b>591</b>道分级题</span>
+      <span><b>16</b>类随机练习（每组 8 题，可无限换）</span>
+      <span><b>22</b>个知识点</span>
     </div>
   </div>
 </header>
@@ -185,6 +192,7 @@ window.MathJax = {
       <ul>
         <li><span class="st done">已考</span><span>Unit 1 Statistics：集中趋势、标准差、异常值、散点图与回归（9月14/15日 Criterion C/D）</span></li>
         <li><span class="st now">进行中</span><span>Unit 2 Exploring Space：实数分类、科学记数法、指数法则、分数/负指数、指数方程、根式</span></li>
+        <li><span class="st now">新增</span><span>根式拓展（Dr Frost 9MAE.2）：含字母化简、单项/共轭有理化、指定形式、几何应用 → Part A+</span></li>
         <li><span class="st next">待公布</span><span>后续单元 Moodle 上还没有内容</span></li>
       </ul>
     </div>
@@ -224,6 +232,7 @@ window.MathJax = {
 <nav class="rail" aria-label="知识点导航">
   <div class="wrap">
     <span class="grp">EXT MATH</span><a href="#a-numbers">实数分类</a><a href="#a-sci">科学记数法</a><a href="#a-laws">指数运算法则</a><a href="#a-neg">零指数与负指数</a><a href="#a-frac">分数指数</a><a href="#a-expeq">指数方程</a><a href="#a-surds">根式运算</a><a href="#a-mixed">综合测验模拟</a><a href="#a-stats1">集中趋势与离散程度</a><a href="#a-stats2">标准差与异常值</a><a href="#a-stats3">散点图与回归</a>
+    <span class="grp">SURDS+</span><a href="#c-simplify">化简与合并根式（含字母）</a><a href="#c-mono">单项分母有理化（含字母）</a><a href="#c-conj">共轭有理化</a><a href="#c-forms">平方展开与指定形式</a><a href="#c-geom">几何中的根式</a>
     <span class="grp">MfE</span><a href="#b-trig">三角函数</a><a href="#b-func">函数：一次与二次</a><a href="#b-vec">坐标与向量</a><a href="#b-suvat1">一维运动 SUVAT</a><a href="#b-suvat2">二维运动与抛体</a><a href="#b-binary">二进制与十六进制</a>
     <a class="go" href="#drills">随机练习</a>
   </div>
@@ -239,6 +248,7 @@ window.MathJax = {
     <h3>实数分类 <span class="en">Classifying Numbers</span></h3>
     <div class="meta"><span class="tag">八年级复习</span><span class="cnt">21 题</span></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>先分“有理”和“无理”：能写成两个整数之比 \(\frac pq\) 的就是有理数，包括整数、有限小数和循环小数。无限不循环的小数是无理数，例如 \(\pi\) 和开不尽的根号 \(\sqrt2\)。判断前先化简：\(\sqrt9=3\) 其实是整数。</p><p class="ex"><b>例</b>\(0.\overline{45}\)：设 \(x=0.4545\ldots\)，则 \(100x=45.4545\ldots\)，相减得 \(99x=45\)，\(x=\frac{5}{11}\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(\mathbb{N}\) 自然数 {0, 1, 2, …}（IB 约定含 0）</li><li>\(\mathbb{Z}\) 整数</li><li>\(\mathbb{Q}\) 有理数 = 可写成 \(\frac{p}{q}\)（含有限小数、循环小数）</li><li>\(\mathbb{Q}'\) 无理数：无限不循环，如 \(\pi\)、\(\sqrt{2}\)</li><li>\(\mathbb{N}\subset\mathbb{Z}\subset\mathbb{Q}\subset\mathbb{R}\)</li></ul></div>
   
 <div class="level lv1">
@@ -278,6 +288,7 @@ window.MathJax = {
     <h3>科学记数法 <span class="en">Scientific Notation</span></h3>
     <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">34 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>科学记数法 = 一个 1 到 10 之间的数 × 10 的几次方。小数点向左移几位，指数就是正几；向右移几位，指数就是负几。乘除时系数和 10 的幂分开算，最后再把系数调回 1–10 之间。</p><p class="ex"><b>例</b>\(0.00062\)：小数点右移 4 位得 6.2，所以是 \(6.2\times10^{-4}\)；\((4\times10^{3})(5\times10^{6})=20\times10^{9}=2\times10^{10}\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(a\times10^{n}\)，其中 \(1\le a\lt 10\)，\(n\in\mathbb{Z}\)</li><li>相乘：系数相乘、指数相加；相除：系数相除、指数相减</li><li>相加减：先化成相同的 \(10^{n}\) 再计算</li><li>结果的系数不在 1–10 之间时要重新调整</li></ul></div>
   
 <div class="level lv1">
@@ -347,6 +358,7 @@ window.MathJax = {
     <h3>指数运算法则 <span class="en">Laws of Exponents</span></h3>
     <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">35 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>底数相同时：相乘指数相加，相除指数相减，乘方指数相乘。带系数的题，数字和数字算，字母和字母算。括号外的乘方要作用到括号里的每一个因数，包括数字和负号。</p><p class="ex"><b>例</b>\((2x^{3})^{2}\cdot3x=4x^{6}\cdot3x=12x^{7}\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(a^{m}\cdot a^{n}=a^{m+n}\)</li><li>\(a^{m}\div a^{n}=a^{m-n}\)</li><li>\((a^{m})^{n}=a^{mn}\)</li><li>\((ab)^{n}=a^{n}b^{n}\)</li><li>\(\left(\frac{a}{b}\right)^{n}=\frac{a^{n}}{b^{n}}\)</li><li>系数（数字）照常乘除，字母的指数按法则运算</li></ul></div>
   
 <div class="level lv1">
@@ -396,6 +408,7 @@ window.MathJax = {
     <h3>零指数与负指数 <span class="en">Zero & Negative Indices</span></h3>
     <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">30 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>负指数表示“取倒数”：\(a^{-n}=\frac{1}{a^{n}}\)，结果不会因此变成负数。任何不为 0 的数的 0 次方都等于 1。分数的负指数：把分数倒过来，指数变正。注意 \(3x^{-2}\) 里只有 \(x\) 被倒到分母，3 不动。</p><p class="ex"><b>例</b>\(\left(\frac23\right)^{-2}=\left(\frac32\right)^{2}=\frac94\)；\(3x^{-2}=\frac{3}{x^{2}}\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(a^{0}=1\ (a\ne0)\)</li><li>\(a^{-n}=\dfrac{1}{a^{n}}\)</li><li>\(\dfrac{1}{a^{-n}}=a^{n}\)</li><li>\(\left(\dfrac{a}{b}\right)^{-n}=\left(\dfrac{b}{a}\right)^{n}\)</li><li>最终答案一般写成正指数</li></ul></div>
   
 <div class="level lv1">
@@ -445,6 +458,7 @@ window.MathJax = {
     <h3>分数指数 <span class="en">Fractional Indices</span></h3>
     <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">43 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>分数指数的分母表示“开几次方”，分子表示“再乘几次方”。先开方再乘方，数字更小更好算。指数前有负号，最后取倒数。</p><p class="ex"><b>例</b>\(8^{-\frac23}=\frac{1}{(\sqrt[3]{8})^{2}}=\frac{1}{2^{2}}=\frac14\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(a^{\frac1n}=\sqrt[n]{a}\)</li><li>\(a^{\frac mn}=\left(\sqrt[n]{a}\right)^{m}=\sqrt[n]{a^{m}}\)</li><li>\(a^{-\frac mn}=\dfrac{1}{a^{\frac mn}}\)</li><li>技巧：先开方（分母），再乘方（分子），数字更小更好算</li></ul></div>
   
 <div class="level lv1">
@@ -504,6 +518,7 @@ window.MathJax = {
     <h3>指数方程 <span class="en">Exponential Equations</span></h3>
     <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">32 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>把等号两边写成同一个底数的幂，底数相同时指数必须相等，于是变成普通的一次（或二次）方程。常用底数：\(4=2^{2}\)、\(8=2^{3}\)、\(9=3^{2}\)、\(27=3^{3}\)。</p><p class="ex"><b>例</b>\(4^{x+1}=8^{x}\) → \(2^{2x+2}=2^{3x}\) → \(2x+2=3x\) → \(x=2\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>把两边化成同一个底数，然后让指数相等</li><li>\(a^{x}=a^{y}\Rightarrow x=y\)</li><li>常用底数：\(4=2^2,\ 8=2^3,\ 16=2^4,\ 9=3^2,\ 27=3^3,\ 25=5^2\)</li><li>含 \(a^{2x}\) 和 \(a^{x}\) 时：设 \(y=a^{x}\)，化成二次方程</li></ul></div>
   
 <div class="level lv1">
@@ -553,6 +568,7 @@ window.MathJax = {
     <h3>根式运算 <span class="en">Radicals (Surds)</span></h3>
     <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">58 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>化简根式就是把根号里的完全平方数开出来放到外面。只有根号里相同的才能合并，就像合并同类项。分母里有根号时要有理化：分子分母同乘一个式子，让分母变成整数。</p><p class="ex"><b>例</b>\(\sqrt{50}-\sqrt{18}=5\sqrt2-3\sqrt2=2\sqrt2\)；\(\frac{6}{\sqrt3}=\frac{6\sqrt3}{3}=2\sqrt3\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(\sqrt{ab}=\sqrt a\sqrt b\)，\(\sqrt{\frac ab}=\frac{\sqrt a}{\sqrt b}\)</li><li>化简：找出最大的完全平方因数，如 \(\sqrt{72}=\sqrt{36}\sqrt2=6\sqrt2\)</li><li>只有同类根式才能相加减：\(3\sqrt2+5\sqrt2=8\sqrt2\)</li><li>\((a+\sqrt b)(a-\sqrt b)=a^{2}-b\)</li><li>分母有理化：\(\frac{k}{\sqrt b}\cdot\frac{\sqrt b}{\sqrt b}\)；\(\frac{k}{a+\sqrt b}\) 乘以共轭 \(a-\sqrt b\)</li></ul></div>
   
 <div class="level lv1">
@@ -632,6 +648,7 @@ window.MathJax = {
     <h3>综合测验模拟 <span class="en">Criterion A Mixed Practice</span></h3>
     <div class="meta"><span class="tag hot">10月21/22日测验前</span><span class="cnt">10 题</span></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>综合题把前面几类混在一起。先判断每题属于哪一类（指数运算、根式、指数方程还是科学记数法），再用对应的方法。每一步都写出来，Criterion A 看重过程。</p><p class="ex"><b>例</b>\(4^{x}=\sqrt{32}\)：右边 \(=2^{\frac52}\)，左边 \(=2^{2x}\)，所以 \(2x=\frac52\)，\(x=\frac54\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>限时 25 分钟、不用计算器，做完再对答案</li><li>每题写出步骤：IB Criterion A 看重过程</li></ul></div>
   
 <div class="level lv3">
@@ -651,6 +668,7 @@ window.MathJax = {
     <h3>集中趋势与离散程度 <span class="en">Central Tendency & Spread</span></h3>
     <div class="meta"><span class="tag">复习</span><span class="cnt">9 题</span></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>平均数容易被极端值拉偏，中位数不会。四分位数把排好序的数据分成四等份：\(Q_1\) 是下半部分的中位数，\(Q_3\) 是上半部分的中位数，\(IQR=Q_3-Q_1\) 表示中间 50% 数据的分布范围。</p><p class="ex"><b>例</b>2, 3, 4, 5, 7, 7, 7, 9：共 8 个数，中位数是第 4、5 个的平均 \(\frac{5+7}{2}=6\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>平均数 mean = 总和 ÷ 个数；中位数 median = 排序后中间的数；众数 mode = 出现最多</li><li>四分位数：\(Q_1\) = 下半部分的中位数，\(Q_3\) = 上半部分的中位数（n 为奇数时中位数不计入两半）</li><li>\(IQR=Q_3-Q_1\)，极差 range = max − min</li><li>分组数据：用组中值 mid-point 估计平均数</li></ul></div>
   
 <div class="level lv1">
@@ -690,6 +708,7 @@ window.MathJax = {
     <h3>标准差与异常值 <span class="en">Standard Deviation & Outliers</span></h3>
     <div class="meta"><span class="tag">复习</span><span class="cnt">9 题</span></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>标准差衡量数据离平均数平均有多远。步骤：求平均数 → 每个数减平均数再平方 → 求这些平方的平均 → 开根号。数值越小，数据越集中。异常值用 1.5 × IQR 规则判断。</p><p class="ex"><b>例</b>2, 4, 6, 8, 10：\(\mu=6\)，平方和 \(16+4+0+4+16=40\)，\(\sigma=\sqrt{40\div5}=\sqrt8\approx2.83\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(\sigma=\sqrt{\dfrac{\sum (x-\mu)^{2}}{n}}\)（总体标准差，GDC 中的 \(\sigma_x\)）</li><li>标准差越小 → 数据越集中、越稳定</li><li>异常值：小于 \(Q_1-1.5\times IQR\) 或大于 \(Q_3+1.5\times IQR\)</li><li>异常值对平均数影响大，对中位数影响小</li></ul></div>
   
 <div class="level lv1">
@@ -729,6 +748,7 @@ window.MathJax = {
     <h3>散点图与回归 <span class="en">Scatter Graphs & Regression</span></h3>
     <div class="meta"><span class="tag">复习</span><span class="cnt">10 题</span></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>散点图显示两个变量之间的关系。回归直线 \(y=ax+b\) 用来预测，\(r\) 越接近 \(\pm1\) 关系越强。在数据范围内预测可靠，超出范围（外推）就不可靠。</p><p class="ex"><b>例</b>\(y=2.5x+40\)：斜率 2.5 表示 \(x\) 每增加 1，\(y\) 增加 2.5；\(x=8\) 时 \(y=60\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>描述相关性：方向（正/负）+ 强度（强/中/弱）+ 形式（线性/非线性）</li><li>Pearson \(r\)：\(|r|\) 0–0.25 很弱，0.25–0.5 弱，0.5–0.75 中等，0.75–1 强</li><li>回归直线 \(y=ax+b\)：\(a\) 是每增加 1 个单位 \(x\)，\(y\) 的变化量</li><li>数据范围内预测 = 插值（可靠）；范围外 = 外推（不可靠）</li><li>相关 ≠ 因果</li></ul></div>
   
 <div class="level lv1">
@@ -764,6 +784,261 @@ window.MathJax = {
 </section>
   </section>
 
+  <section class="part" id="part-surds">
+    <div class="part-head"><h2>Part A+ · 根式拓展</h2><p>根据 Dr Frost 9MAE.2 Rationalising Surds Extension Problems 的 12 道题，按知识点拆开、由浅入深；原题放在每个知识点的“挑战”里</p></div>
+    
+<section class="topic" id="c-simplify">
+  <header class="topic-head">
+    <p class="unit">Unit 2 · 根式拓展（Dr Frost 9MAE.2）</p>
+    <h3>化简与合并根式（含字母） <span class="en">Simplifying & Collecting Surds</span></h3>
+    <div class="meta"><span class="tag hot">对应原题 1、2</span><span class="cnt">30 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>所有根式答案都要写成最简形式：把根号里最大的完全平方因数开出来。只有根号里的数相同（同类根式）才能相加减，就像 \(3x+5x=8x\)。根号里有字母时，\(\sqrt{b^{2}}=b\)（\(b>0\)），所以 \(\sqrt{6b^{2}}=b\sqrt6\)。</p><p class="ex"><b>例</b>\(\sqrt{75}+\sqrt{12}=\sqrt{25}\sqrt3+\sqrt4\sqrt3=5\sqrt3+2\sqrt3=7\sqrt3\)</p></div>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(\sqrt{ab}=\sqrt a\sqrt b\)，找最大的完全平方因数：4, 9, 16, 25, 36, 49, 64, 81, 100…</li><li>先化简每一项，再合并同类根式</li><li>\(\sqrt{x^{2}}=x\)，\(\sqrt{x^{3}}=x\sqrt x\)（\(x>0\)）</li><li>分数形式的根式先有理化，再合并：\(\frac{6}{\sqrt3}=2\sqrt3\)</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">10 题</span>
+    <label class="done"><input type="checkbox" id="done-c-simplify-0" data-key="c-simplify-0"> 完成</label>
+  </div>
+  <p class="instr">Simplify fully.</p>
+  <ol class="qs"><li>\(\sqrt{12}+\sqrt{75}\)</li><li>\(\sqrt{50}+\sqrt{8}\)</li><li>\(\sqrt{45}-\sqrt{20}\)</li><li>\(\sqrt{27}+\sqrt{48}\)</li><li>\(\sqrt{18}+\sqrt{32}-\sqrt8\)</li><li>\(2\sqrt{12}-\sqrt{27}\)</li><li>\(\sqrt{80}-\sqrt5\)</li><li>\(\sqrt{200}+\sqrt{50}\)</li><li>\(\sqrt{108}-\sqrt{12}\)</li><li>\(\sqrt{63}+\sqrt{28}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(7\sqrt3\)</li><li>\(7\sqrt2\)</li><li>\(\sqrt5\)</li><li>\(7\sqrt3\)</li><li>\(5\sqrt2\)</li><li>\(\sqrt3\)</li><li>\(3\sqrt5\)</li><li>\(15\sqrt2\)</li><li>\(4\sqrt3\)</li><li>\(5\sqrt7\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-c-simplify-1" data-key="c-simplify-1"> 完成</label>
+  </div>
+  <p class="instr">Simplify. All letters are positive.</p>
+  <ol class="qs"><li>\(\sqrt{9a^{2}}\)</li><li>\(\sqrt{12x^{2}}\)</li><li>\(\sqrt{50b^{2}}\)</li><li>\(\sqrt{a^{3}}\)</li><li>\(\sqrt{18x^{3}}\)</li><li>\(\sqrt{4b^{2}}+\sqrt{9b^{2}}\)</li><li>\(\sqrt{8a^{2}}+\sqrt{18a^{2}}\)</li><li>\(\sqrt{20x^{2}y}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(3a\)</li><li>\(2x\sqrt3\)</li><li>\(5b\sqrt2\)</li><li>\(a\sqrt a\)</li><li>\(3x\sqrt{2x}\)</li><li>\(5b\)</li><li>\(5a\sqrt2\)</li><li>\(2x\sqrt{5y}\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-c-simplify-2" data-key="c-simplify-2"> 完成</label>
+  </div>
+  <p class="instr">Give answers in the form \(k\sqrt{n}\) unless told otherwise.</p>
+  <ol class="qs wide"><li>Find the mean of \(\sqrt{48}\), \(\sqrt{27}\) and \(\dfrac{6}{\sqrt3}\).</li><li>Find the mean of \(\sqrt8\), \(\sqrt{50}\), \(\sqrt{18}\) and \(\dfrac{4}{\sqrt2}\).</li><li>Simplify \(\dfrac{3\sqrt{10a^{2}}}{\sqrt5}-\sqrt8+\sqrt{50}\), where \(a\) is a positive integer.</li><li>Simplify \(\dfrac{4\sqrt{15b^{2}}}{\sqrt5}+\sqrt{48}-\sqrt{12}\), where \(b\) is a positive integer.</li><li>Simplify \(\dfrac{\sqrt{12x^{2}}}{\sqrt3}+\sqrt{75}-\sqrt{27}\).</li><li>Simplify \(\sqrt{2a}\cdot\sqrt{8a}\).</li><li>Simplify \(\sqrt{3x}\cdot\sqrt{12x^{3}}\).</li><li>A rectangle measures \(\sqrt{48}\) cm by \(\sqrt{27}\) cm. Find its perimeter and area.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(4\sqrt3+3\sqrt3+2\sqrt3=9\sqrt3\)，平均 \(3\sqrt3\)</li><li>总和 \(12\sqrt2\)，平均 \(3\sqrt2\)</li><li>\(3a\sqrt2+3\sqrt2=(3a+3)\sqrt2\)</li><li>\((4b+2)\sqrt3\)</li><li>\(2x+2\sqrt3\)</li><li>\(4a\)</li><li>\(6x^{2}\)</li><li>周长 \(14\sqrt3\) cm，面积 36 cm²</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-c-simplify-3" data-key="c-simplify-3"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>（原题 1）Work out the mean of \(\sqrt{75}\), \(\sqrt{75}\) and \(\dfrac{6}{\sqrt3}\). Give your answer as \(b\sqrt3\).</li><li>（原题 2）Simplify \(\dfrac{2\sqrt{6b^{2}}}{\sqrt2}-\sqrt{27}+\sqrt{192}\), where \(b\) is an integer.</li><li>Find \(n\) if \(\sqrt n+\sqrt{12}=\sqrt{75}\).</li><li>Simplify \(\sqrt x+\sqrt{4x}+\sqrt{9x}+\sqrt{16x}\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(5\sqrt3+5\sqrt3+2\sqrt3=12\sqrt3\)，平均 \(4\sqrt3\)</li><li>\(2b\sqrt3-3\sqrt3+8\sqrt3=(2b+5)\sqrt3\)</li><li>\(\sqrt n=5\sqrt3-2\sqrt3=3\sqrt3\)，\(n=27\)</li><li>\(10\sqrt x\)</li></ol></details>
+</div>
+</section>
+<section class="topic" id="c-mono">
+  <header class="topic-head">
+    <p class="unit">Unit 2 · 根式拓展（Dr Frost 9MAE.2）</p>
+    <h3>单项分母有理化（含字母） <span class="en">Rationalising √k Denominators</span></h3>
+    <div class="meta"><span class="tag hot">对应原题 5、7、9</span><span class="cnt">30 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>分母是 \(\sqrt k\) 时，分子分母同乘 \(\sqrt k\)，因为 \(\sqrt k\cdot\sqrt k=k\)。分子有两项时，两项都要乘，然后逐项约分。也可以先把分数拆开，每一项单独化简。字母 \(p\) 是质数时当作普通根式处理：\(\sqrt p\cdot\sqrt p=p\)，\(\sqrt{p^{3}}=p\sqrt p\)。</p><p class="ex"><b>例</b>\(\dfrac{3c-\sqrt c}{\sqrt c}=\dfrac{3c}{\sqrt c}-\dfrac{\sqrt c}{\sqrt c}=3\sqrt c-1\)（因为 \(\frac{c}{\sqrt c}=\sqrt c\)）</p></div>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(\dfrac{a}{\sqrt k}=\dfrac{a\sqrt k}{k}\)</li><li>\(\dfrac{k}{\sqrt k}=\sqrt k\)（很常用！）</li><li>拆分法：\(\dfrac{A+B}{\sqrt k}=\dfrac{A}{\sqrt k}+\dfrac{B}{\sqrt k}\)</li><li>\(\sqrt{p^{3}}=p\sqrt p\)，\(\sqrt{4p}=2\sqrt p\)</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">10 题</span>
+    <label class="done"><input type="checkbox" id="done-c-mono-0" data-key="c-mono-0"> 完成</label>
+  </div>
+  <p class="instr">Rationalise the denominator and simplify.</p>
+  <ol class="qs"><li>\(\dfrac{1}{\sqrt3}\)</li><li>\(\dfrac{4}{\sqrt2}\)</li><li>\(\dfrac{10}{\sqrt5}\)</li><li>\(\dfrac{3}{\sqrt6}\)</li><li>\(\dfrac{12}{\sqrt3}\)</li><li>\(\dfrac{7}{\sqrt7}\)</li><li>\(\dfrac{2}{3\sqrt2}\)</li><li>\(\dfrac{5}{2\sqrt5}\)</li><li>\(\dfrac{\sqrt3}{\sqrt2}\)</li><li>\(\dfrac{6}{\sqrt{12}}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(\frac{\sqrt3}{3}\)</li><li>\(2\sqrt2\)</li><li>\(2\sqrt5\)</li><li>\(\frac{\sqrt6}{2}\)</li><li>\(4\sqrt3\)</li><li>\(\sqrt7\)</li><li>\(\frac{\sqrt2}{3}\)</li><li>\(\frac{\sqrt5}{2}\)</li><li>\(\frac{\sqrt6}{2}\)</li><li>\(\sqrt3\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-c-mono-1" data-key="c-mono-1"> 完成</label>
+  </div>
+  <p class="instr">Two-term numerators. Rationalise and simplify.</p>
+  <ol class="qs"><li>\(\dfrac{2+\sqrt3}{\sqrt3}\)</li><li>\(\dfrac{4+\sqrt2}{\sqrt2}\)</li><li>\(\dfrac{6-\sqrt5}{\sqrt5}\)</li><li>\(\dfrac{3+\sqrt6}{\sqrt3}\)</li><li>\(\dfrac{\sqrt{10}-5}{\sqrt5}\)</li><li>\(\dfrac{8+\sqrt2}{2\sqrt2}\)</li><li>\(\dfrac{12+3\sqrt3}{\sqrt3}\)</li><li>\(\dfrac{\sqrt6+\sqrt{15}}{\sqrt3}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(\frac{2\sqrt3+3}{3}\)</li><li>\(2\sqrt2+1\)</li><li>\(\frac{6\sqrt5-5}{5}\)</li><li>\(\sqrt3+\sqrt2\)</li><li>\(\sqrt2-\sqrt5\)</li><li>\(2\sqrt2+\frac12\)</li><li>\(4\sqrt3+3\)</li><li>\(\sqrt2+\sqrt5\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-c-mono-2" data-key="c-mono-2"> 完成</label>
+  </div>
+  <p class="instr">\(a\), \(c\) and \(p\) are prime numbers. Rationalise and simplify.</p>
+  <ol class="qs"><li>\(\dfrac{a}{\sqrt a}\)</li><li>\(\dfrac{2a+\sqrt a}{\sqrt a}\)</li><li>\(\dfrac{5p-\sqrt p}{\sqrt p}\)</li><li>\(\dfrac{p+3\sqrt p}{\sqrt p}\)</li><li>\(\dfrac{p}{\sqrt{p^{3}}}\)</li><li>\(\dfrac{4-p}{\sqrt p}\)</li><li>\(\dfrac{\sqrt p+p^{2}}{\sqrt{p^{3}}}\)</li><li>\(\dfrac{2p-\sqrt p}{\sqrt{4p}}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(\sqrt a\)</li><li>\(2\sqrt a+1\)</li><li>\(5\sqrt p-1\)</li><li>\(\sqrt p+3\)</li><li>\(\frac{1}{\sqrt p}=\frac{\sqrt p}{p}\)</li><li>\(\frac{(4-p)\sqrt p}{p}\)</li><li>\(\frac1p+\sqrt p\)</li><li>\(\sqrt p-\frac12\)</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">4 题</span>
+    <label class="done"><input type="checkbox" id="done-c-mono-3" data-key="c-mono-3"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>（原题 5）\(c\) is prime. Rationalise \(\dfrac{3c-\sqrt c}{\sqrt c}\).</li><li>（原题 7）\(a\) is prime. Rationalise \(\dfrac{a+\sqrt a}{\sqrt a}\).</li><li>（原题 9）\(p\) is prime. Rationalise \(\dfrac{7\sqrt p-p^{2}}{\sqrt{p^{3}}}\).</li><li>\(a, b\) are primes. Simplify \(\dfrac{a\sqrt b+b\sqrt a}{\sqrt{ab}}\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(3\sqrt c-1\)</li><li>\(\sqrt a+1\)</li><li>\(\frac{7\sqrt p}{p\sqrt p}-\frac{p^{2}}{p\sqrt p}=\frac7p-\sqrt p\)</li><li>\(\sqrt a+\sqrt b\)</li></ol></details>
+</div>
+</section>
+<section class="topic" id="c-conj">
+  <header class="topic-head">
+    <p class="unit">Unit 2 · 根式拓展（Dr Frost 9MAE.2）</p>
+    <h3>共轭有理化 <span class="en">Rationalising with the Conjugate</span></h3>
+    <div class="meta"><span class="tag hot">对应原题 4、6、8、11</span><span class="cnt">31 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>分母是 \(a+\sqrt b\) 或 \(\sqrt a-\sqrt b\) 这种两项式时，乘以它的“共轭”：只把中间的符号变号。因为 \((a+\sqrt b)(a-\sqrt b)=a^{2}-b\)，根号就消失了。分子也乘同一个式子，然后展开、合并、约分。技巧：先把分子分母里的根式化简，有公因数先提出来（如 \(5\sqrt5-5=5(\sqrt5-1)\)），计算会简单很多。</p><p class="ex"><b>例</b>\(\dfrac{2}{6-3\sqrt2}=\dfrac{2(6+3\sqrt2)}{36-18}=\dfrac{12+6\sqrt2}{18}=\dfrac{2+\sqrt2}{3}\)</p></div>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\((a+\sqrt b)(a-\sqrt b)=a^{2}-b\)</li><li>\((\sqrt a+\sqrt b)(\sqrt a-\sqrt b)=a-b\)</li><li>\(a+\sqrt b\) 的共轭是 \(a-\sqrt b\)；\(\sqrt a-\sqrt b\) 的共轭是 \(\sqrt a+\sqrt b\)</li><li>分子要整体乘，展开时用 FOIL，四项都不能漏</li><li>最后检查：能约分吗？能写成题目要求的形式吗？</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">10 题</span>
+    <label class="done"><input type="checkbox" id="done-c-conj-0" data-key="c-conj-0"> 完成</label>
+  </div>
+  <p class="instr">Q1–4: expand. Q5–10: rationalise the denominator.</p>
+  <ol class="qs"><li>\((3+\sqrt2)(3-\sqrt2)\)</li><li>\((\sqrt5+1)(\sqrt5-1)\)</li><li>\((2\sqrt3-1)(2\sqrt3+1)\)</li><li>\((\sqrt7+\sqrt3)(\sqrt7-\sqrt3)\)</li><li>\(\dfrac{1}{\sqrt2+1}\)</li><li>\(\dfrac{2}{\sqrt3-1}\)</li><li>\(\dfrac{4}{\sqrt5+1}\)</li><li>\(\dfrac{1}{2+\sqrt3}\)</li><li>\(\dfrac{6}{3-\sqrt3}\)</li><li>\(\dfrac{3}{\sqrt5-\sqrt2}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(7\)</li><li>\(4\)</li><li>\(11\)</li><li>\(4\)</li><li>\(\sqrt2-1\)</li><li>\(\sqrt3+1\)</li><li>\(\sqrt5-1\)</li><li>\(2-\sqrt3\)</li><li>\(3+\sqrt3\)</li><li>\(\sqrt5+\sqrt2\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-c-conj-1" data-key="c-conj-1"> 完成</label>
+  </div>
+  <p class="instr">Write in the form \(a+b\sqrt c\) (\(a\), \(b\) may be fractions).</p>
+  <ol class="qs"><li>\(\dfrac{1+\sqrt2}{\sqrt2-1}\)</li><li>\(\dfrac{4+\sqrt3}{2-\sqrt3}\)</li><li>\(\dfrac{5-\sqrt8}{\sqrt2-1}\)</li><li>\(\dfrac{\sqrt5+3}{\sqrt5-2}\)</li><li>\(\dfrac{2\sqrt3+1}{\sqrt3+1}\)</li><li>\(\dfrac{3}{6-3\sqrt3}\)</li><li>\(\dfrac{\sqrt{12}-2}{\sqrt3-1}\)</li><li>\(\dfrac{\sqrt{18}+2}{\sqrt2+1}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(3+2\sqrt2\)</li><li>\(11+6\sqrt3\)</li><li>\(1+3\sqrt2\)</li><li>\(11+5\sqrt5\)</li><li>\(\frac52-\frac12\sqrt3\)</li><li>\(2+\sqrt3\)</li><li>\(2\)（分子 \(=2(\sqrt3-1)\)）</li><li>\(4-\sqrt2\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-c-conj-2" data-key="c-conj-2"> 完成</label>
+  </div>
+  <p class="instr">Rationalise and simplify fully.</p>
+  <ol class="qs"><li>\(\dfrac{4}{6-2\sqrt5}\)</li><li>\(\dfrac{6}{4+\sqrt{10}}\)</li><li>\(\dfrac{3}{3+\sqrt6}\)</li><li>\(\dfrac{\sqrt{75}-\sqrt3}{2\sqrt3+3}\)</li><li>\(\dfrac{\sqrt{20}+\sqrt5}{\sqrt5+1}\)</li><li>\(\dfrac{\sqrt{72}-\sqrt2}{3\sqrt2-3}\)</li><li>\(\dfrac{1}{\sqrt x+1}\)</li><li>\(\dfrac{\sqrt x+2}{\sqrt x-2}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(\frac{3+\sqrt5}{2}\)</li><li>\(4-\sqrt{10}\)</li><li>\(3-\sqrt6\)</li><li>\(8-4\sqrt3\)</li><li>\(\frac{15-3\sqrt5}{4}\)</li><li>\(\frac{10+5\sqrt2}{3}\)</li><li>\(\frac{\sqrt x-1}{x-1}\)</li><li>\(\frac{x+4\sqrt x+4}{x-4}\)</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">5 题</span>
+    <label class="done"><input type="checkbox" id="done-c-conj-3" data-key="c-conj-3"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>（原题 4）Show that \(\dfrac{6-\sqrt8}{\sqrt2-1}\) can be written as \(a+b\sqrt2\).</li><li>（原题 6）Show that \(\dfrac{2}{6-3\sqrt2}=\dfrac{a+\sqrt a}{b}\). Find \(a\) and \(b\).</li><li>（原题 8）\(a\) is an integer, \(b\) is prime. Rationalise \(\dfrac{a+\sqrt{4b}}{a-\sqrt{4b}}\) and expand fully.</li><li>（原题 11）Show that \(\dfrac{\sqrt{180}-2\sqrt5}{5\sqrt5-5}=a+\dfrac{\sqrt5}{b}\). Find \(a\) and \(b\).</li><li>Show that \(\dfrac{1}{\sqrt3+\sqrt2}+\dfrac{1}{\sqrt3-\sqrt2}=2\sqrt3\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\((6-2\sqrt2)(\sqrt2+1)=6\sqrt2+6-4-2\sqrt2=2+4\sqrt2\)</li><li>\(\frac{2+\sqrt2}{3}\)，\(a=2\)，\(b=3\)</li><li>\(\frac{a^{2}+4a\sqrt b+4b}{a^{2}-4b}\)</li><li>\(\frac{4\sqrt5}{5(\sqrt5-1)}=\frac{4\sqrt5(\sqrt5+1)}{20}=1+\frac{\sqrt5}{5}\)，\(a=1\)，\(b=5\)</li><li>\((\sqrt3-\sqrt2)+(\sqrt3+\sqrt2)=2\sqrt3\)</li></ol></details>
+</div>
+</section>
+<section class="topic" id="c-forms">
+  <header class="topic-head">
+    <p class="unit">Unit 2 · 根式拓展（Dr Frost 9MAE.2）</p>
+    <h3>平方展开与指定形式 <span class="en">Expanding & Matching Forms</span></h3>
+    <div class="meta"><span class="tag hot">对应原题 10</span><span class="cnt">25 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>\((a+b\sqrt c)^{2}=a^{2}+2ab\sqrt c+b^{2}c\)，中间那项最容易漏。题目要求写成某种形式时，把同一个根式换一种“外表”，再对比：有理数部分对有理数部分，根式部分对根式部分。比如 \(\frac{q}{\sqrt8}\) 和 \(30\sqrt2\) 要相等，就把两边都化成同一种样子再比较。</p><p class="ex"><b>例</b>\((5+3\sqrt2)^{2}=25+30\sqrt2+18=43+30\sqrt2\)。若写成 \(p+\frac{q}{\sqrt8}\)，则 \(\frac{q}{\sqrt8}=30\sqrt2\)，\(q=30\sqrt2\cdot\sqrt8=30\times4=120\)</p></div>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\((a+b\sqrt c)^{2}=a^{2}+b^{2}c+2ab\sqrt c\)</li><li>\((\sqrt a+\sqrt b)^{2}=a+b+2\sqrt{ab}\)</li><li>\(k\sqrt n=\sqrt{k^{2}n}\)，如 \(6\sqrt2=\sqrt{72}\)</li><li>对比系数：\(p+q\sqrt c=r+s\sqrt c\Rightarrow p=r,\ q=s\)</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-c-forms-0" data-key="c-forms-0"> 完成</label>
+  </div>
+  <p class="instr">Expand and simplify.</p>
+  <ol class="qs"><li>\((1+\sqrt2)^{2}\)</li><li>\((2+\sqrt3)^{2}\)</li><li>\((3-\sqrt5)^{2}\)</li><li>\((\sqrt2+\sqrt3)^{2}\)</li><li>\((2\sqrt5+1)^{2}\)</li><li>\((4-\sqrt7)^{2}\)</li><li>\((\sqrt6-\sqrt2)^{2}\)</li><li>\((3+2\sqrt2)^{2}\)</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs"><li>\(3+2\sqrt2\)</li><li>\(7+4\sqrt3\)</li><li>\(14-6\sqrt5\)</li><li>\(5+2\sqrt6\)</li><li>\(21+4\sqrt5\)</li><li>\(23-8\sqrt7\)</li><li>\(8-4\sqrt3\)</li><li>\(17+12\sqrt2\)</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">8 题</span>
+    <label class="done"><input type="checkbox" id="done-c-forms-1" data-key="c-forms-1"> 完成</label>
+  </div>
+  <p class="instr">Rewrite in the required form.</p>
+  <ol class="qs wide"><li>Write \(6\sqrt2\) as \(\sqrt n\).</li><li>Write \(\dfrac{12}{\sqrt3}\) as \(k\sqrt3\).</li><li>\(10\sqrt2=\dfrac{q}{\sqrt2}\). Find \(q\).</li><li>\(6\sqrt3=\dfrac{q}{\sqrt{12}}\). Find \(q\).</li><li>\(4\sqrt5=k\sqrt{20}\). Find \(k\).</li><li>Write \(\sqrt8+\sqrt{32}\) as \(k\sqrt2\).</li><li>\((1+\sqrt2)^{2}=p+q\sqrt8\). Find \(p\), \(q\).</li><li>\((2+\sqrt3)^{2}=p+q\sqrt{12}\). Find \(p\), \(q\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(\sqrt{72}\)</li><li>\(4\sqrt3\)</li><li>\(q=20\)</li><li>\(q=36\)</li><li>\(k=2\)</li><li>\(6\sqrt2\)</li><li>\(3+2\sqrt2=3+\sqrt8\)：\(p=3\)，\(q=1\)</li><li>\(7+4\sqrt3=7+2\sqrt{12}\)：\(p=7\)，\(q=2\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">6 题</span>
+    <label class="done"><input type="checkbox" id="done-c-forms-2" data-key="c-forms-2"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>\((3+\sqrt2)^{2}=p+\dfrac{q}{\sqrt2}\). Find \(p\) and \(q\).</li><li>\((2+\sqrt5)^{2}=p+\dfrac{q}{\sqrt5}\). Find \(p\) and \(q\).</li><li>Expand \((1+\sqrt3)^{3}\) in the form \(a+b\sqrt3\).</li><li>\(a\), \(b\) are positive integers and \((a+b\sqrt2)^{2}=11+6\sqrt2\). Find \(a\) and \(b\).</li><li>Simplify \(\sqrt{11+6\sqrt2}\).</li><li>Write \(\dfrac{(\sqrt3+1)^{2}}{\sqrt3-1}\) in the form \(a+b\sqrt3\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(11+6\sqrt2\)；\(\frac{q}{\sqrt2}=6\sqrt2\)，\(q=12\)，\(p=11\)</li><li>\(9+4\sqrt5\)；\(q=20\)，\(p=9\)</li><li>\((4+2\sqrt3)(1+\sqrt3)=10+6\sqrt3\)</li><li>\(a^{2}+2b^{2}=11\)，\(2ab=6\) → \(a=3\)，\(b=1\)</li><li>\(3+\sqrt2\)</li><li>\(\frac{(4+2\sqrt3)(\sqrt3+1)}{2}=5+3\sqrt3\)</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">3 题</span>
+    <label class="done"><input type="checkbox" id="done-c-forms-3" data-key="c-forms-3"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>（原题 10）\((5+3\sqrt2)^{2}=43+30\sqrt2=p+\dfrac{q}{\sqrt8}\). Find \(q\).</li><li>Write \((\sqrt2+1)^{4}\) in the form \(a+b\sqrt2\).</li><li>Write \((2-\sqrt3)^{-2}\) in the form \(a+b\sqrt3\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(q=30\sqrt2\times\sqrt8=120\)</li><li>\((3+2\sqrt2)^{2}=17+12\sqrt2\)</li><li>\(\frac{1}{2-\sqrt3}=2+\sqrt3\)，所以 \((2+\sqrt3)^{2}=7+4\sqrt3\)</li></ol></details>
+</div>
+</section>
+<section class="topic" id="c-geom">
+  <header class="topic-head">
+    <p class="unit">Unit 2 · 根式拓展（Dr Frost 9MAE.2）</p>
+    <h3>几何中的根式 <span class="en">Surds in Geometry</span></h3>
+    <div class="meta"><span class="tag hot">对应原题 3、12</span><span class="cnt">20 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
+  </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>先写出公式（面积、体积、表面积、勾股定理），把根式代进去，再把要求的量单独放到等号一边。最后一步通常要除以一个含根式的数，这时就要有理化。常用公式：等边三角形面积 \(=\frac{\sqrt3}{4}\times\)边长\(^{2}\)，圆柱表面积 \(=2\pi r^{2}+2\pi rh\)。</p><p class="ex"><b>例</b>原题 3：\(2\pi(4\sqrt3)^{2}+2\pi(4\sqrt3)h=56\pi\sqrt6\) → \(96+8\sqrt3h=56\sqrt6\) → \(h=\frac{56\sqrt6-96}{8\sqrt3}=\frac{7\sqrt6-12}{\sqrt3}=7\sqrt2-4\sqrt3\)</p></div>
+  <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>圆柱：\(V=\pi r^{2}h\)，表面积 \(=2\pi r^{2}+2\pi rh\)</li><li>等边三角形（边长 \(s\)）：面积 \(\frac{\sqrt3}{4}s^{2}\)</li><li>勾股定理 \(a^{2}+b^{2}=c^{2}\)；正方形对角线 \(=\) 边长 \(\times\sqrt2\)</li><li>答案要求“exact value”= 保留根式和 π，不要化成小数</li></ul></div>
+  
+<div class="level lv1">
+  <div class="lv-head">
+    <span class="lv-chip">L1</span><span class="lv-name">基础</span>
+    <span class="lv-count">6 题</span>
+    <label class="done"><input type="checkbox" id="done-c-geom-0" data-key="c-geom-0"> 完成</label>
+  </div>
+  <p class="instr">Give exact answers.</p>
+  <ol class="qs wide"><li>A square has side \(3\sqrt2\) cm. Find its area and perimeter.</li><li>A rectangle is \(2\sqrt3\) cm by \(\sqrt{12}\) cm. Find its area and perimeter.</li><li>A right-angled triangle has legs \(\sqrt5\) and \(\sqrt{11}\). Find the hypotenuse.</li><li>A right-angled triangle has hypotenuse \(2\sqrt7\) and one leg \(\sqrt{10}\). Find the other leg.</li><li>A circle has radius \(\sqrt6\) cm. Find its area and circumference.</li><li>An equilateral triangle has side \(2\sqrt3\) cm. Find its area.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>18 cm²，\(12\sqrt2\) cm</li><li>12 cm²，\(8\sqrt3\) cm</li><li>\(4\)</li><li>\(\sqrt{18}=3\sqrt2\)</li><li>\(6\pi\) cm²，\(2\sqrt6\pi\) cm</li><li>\(\frac{\sqrt3}{4}\times12=3\sqrt3\) cm²</li></ol></details>
+</div>
+<div class="level lv2">
+  <div class="lv-head">
+    <span class="lv-chip">L2</span><span class="lv-name">熟练</span>
+    <span class="lv-count">6 题</span>
+    <label class="done"><input type="checkbox" id="done-c-geom-1" data-key="c-geom-1"> 完成</label>
+  </div>
+  <p class="instr">Give exact answers, with rational denominators.</p>
+  <ol class="qs wide"><li>A rectangle has area 24 cm² and width \(\sqrt6\) cm. Find its length.</li><li>A square has area 50 cm². Find its side and its diagonal.</li><li>A triangle has area 10 cm² and base \(\sqrt5\) cm. Find its height.</li><li>A cuboid measures \(\sqrt2\times\sqrt3\times\sqrt6\) cm. Find its volume.</li><li>A cylinder has radius \(\sqrt3\) cm and height \(2\sqrt3\) cm. Find its volume.</li><li>A rectangle is \((2+\sqrt3)\) by \((2-\sqrt3)\). Find its area and the length of its diagonal.</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(\frac{24}{\sqrt6}=4\sqrt6\) cm</li><li>边长 \(5\sqrt2\) cm，对角线 10 cm</li><li>\(\frac{20}{\sqrt5}=4\sqrt5\) cm</li><li>6 cm³</li><li>\(6\sqrt3\pi\) cm³</li><li>面积 1；对角线 \(\sqrt{14}\)</li></ol></details>
+</div>
+<div class="level lv3">
+  <div class="lv-head">
+    <span class="lv-chip">L3</span><span class="lv-name">提高</span>
+    <span class="lv-count">5 题</span>
+    <label class="done"><input type="checkbox" id="done-c-geom-2" data-key="c-geom-2"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>A rectangle has area \((8+2\sqrt3)\) cm² and width \((1+\sqrt3)\) cm. Find its length as \(a\sqrt3+b\).</li><li>A cylinder has radius \(2\sqrt2\) cm and total surface area \(40\pi\sqrt2\) cm². Find \(h\) as \(a+b\sqrt2\).</li><li>An equilateral triangle has area \(9\sqrt3\) cm². Find its side length.</li><li>A right-angled triangle has legs \((\sqrt5+1)\) and \((\sqrt5-1)\). Find its hypotenuse and area.</li><li>A rectangle has perimeter 20 cm and one side \((3+\sqrt2)\) cm. Find its area as \(a+b\sqrt2\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(\frac{(8+2\sqrt3)(\sqrt3-1)}{2}=3\sqrt3-1\) cm</li><li>\(16\pi+4\sqrt2\pi h=40\sqrt2\pi\) → \(h=10-2\sqrt2\)</li><li>6 cm</li><li>斜边 \(\sqrt{12}=2\sqrt3\)；面积 2</li><li>另一边 \(7-\sqrt2\)；面积 \(19+4\sqrt2\) cm²</li></ol></details>
+</div>
+<div class="level lv4">
+  <div class="lv-head">
+    <span class="lv-chip">挑战</span><span class="lv-name">挑战</span>
+    <span class="lv-count">3 题</span>
+    <label class="done"><input type="checkbox" id="done-c-geom-3" data-key="c-geom-3"> 完成</label>
+  </div>
+  
+  <ol class="qs wide"><li>（原题 3）A cylinder has radius \(4\sqrt3\) cm, height \(h\) cm and total surface area \(56\pi\sqrt6\) cm². Find \(h\) as \(a\sqrt2+b\sqrt3\).</li><li>（原题 12）A prism has an equilateral-triangle cross-section of side \(2x\) cm and length \(d\) cm. Its total surface area is \(T\) cm² and its volume is \(T\) cm³. Find \(d\) in terms of \(x\).</li><li>A cylinder has radius \(2\sqrt3\) cm. Its volume (cm³) equals its total surface area (cm²). Find its height as \(a+b\sqrt3\).</li></ol>
+  <details class="ans"><summary>答案</summary><ol class="qs wide"><li>\(h=7\sqrt2-4\sqrt3\)（见上方讲解）</li><li>\(\sqrt3x^{2}d=2\sqrt3x^{2}+6xd\) → \(d=\frac{2\sqrt3x}{\sqrt3x-6}=\frac{2x}{x-2\sqrt3}\)</li><li>\(12\pi h=24\pi+4\sqrt3\pi h\) → \(h=\frac{6}{3-\sqrt3}=3+\sqrt3\)</li></ol></details>
+</div>
+</section>
+  </section>
+
   <section class="part" id="part-b">
     <div class="part-head"><h2>Part B · Mathematics for Engineering 3</h2><p>三角、函数、向量是后面运动学的基础</p></div>
     
@@ -773,6 +1048,7 @@ window.MathJax = {
     <h3>三角函数 <span class="en">Trigonometry</span></h3>
     <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">56 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>直角三角形里：sin = 对边 ÷ 斜边，cos = 邻边 ÷ 斜边，tan = 对边 ÷ 邻边。单位圆把角扩展到 0–360°，圆上点的坐标就是 \((\cos\theta,\sin\theta)\)。弧度和度的换算：\(\pi\) 弧度 \(=180^\circ\)。</p><p class="ex"><b>例</b>斜边 10、角 30°：对边 \(=10\sin30^\circ=5\)；\(135^\circ=135\times\frac{\pi}{180}=\frac{3\pi}{4}\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>SOH CAH TOA：\(\sin\theta=\frac{opp}{hyp}\)，\(\cos\theta=\frac{adj}{hyp}\)，\(\tan\theta=\frac{opp}{adj}\)</li><li>单位圆上的点 \((\cos\theta,\sin\theta)\)</li><li>\(\pi\ \text{rad}=180^\circ\)；度→弧度 \(\times\frac{\pi}{180}\)，弧度→度 \(\times\frac{180}{\pi}\)</li><li>\(\sin^{2}\theta+\cos^{2}\theta=1\)，\(\tan\theta=\frac{\sin\theta}{\cos\theta}\)</li><li>象限符号 ASTC：一象限全正、二象限 sin 正、三象限 tan 正、四象限 cos 正</li></ul></div>
   
 <div class="level lv1">
@@ -842,6 +1118,7 @@ window.MathJax = {
     <h3>函数：一次与二次 <span class="en">Linear & Quadratic Functions</span></h3>
     <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">30 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>一次函数 \(y=mx+c\) 的图像是直线：\(m\) 是斜率（有多陡），\(c\) 是与 y 轴的交点。二次函数的图像是抛物线：用因式分解或求根公式找根，顶点在 \(x=-\frac{b}{2a}\)。</p><p class="ex"><b>例</b>\(y=x^{2}-5x+6=(x-2)(x-3)\)，根是 2 和 3，顶点 \(x=2.5\)，\(y=-0.25\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>函数：每个输入只对应一个输出</li><li>斜率 \(m=\dfrac{y_2-y_1}{x_2-x_1}\)，直线 \(y=mx+c\)</li><li>平行线斜率相同；垂直线斜率乘积为 −1</li><li>二次函数 \(y=ax^{2}+bx+c\)：顶点 \(x=-\frac{b}{2a}\)</li><li>求根公式 \(x=\dfrac{-b\pm\sqrt{b^{2}-4ac}}{2a}\)；判别式 \(\Delta=b^{2}-4ac\)</li></ul></div>
   
 <div class="level lv1">
@@ -901,6 +1178,7 @@ window.MathJax = {
     <h3>坐标与向量 <span class="en">Polar Coordinates & Vectors</span></h3>
     <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">25 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>向量有大小也有方向。直角坐标 \((x,y)\) 和极坐标 \((r,\theta)\) 可以互换：\(x=r\cos\theta\)，\(y=r\sin\theta\)；反过来 \(r=\sqrt{x^{2}+y^{2}}\)，角度要看点在哪个象限。向量相加就是对应分量相加。</p><p class="ex"><b>例</b>\((4,\ 30^\circ)\)：\(x=4\cos30^\circ=2\sqrt3\)，\(y=4\sin30^\circ=2\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>极坐标 → 直角坐标：\(x=r\cos\theta\)，\(y=r\sin\theta\)</li><li>直角坐标 → 极坐标：\(r=\sqrt{x^{2}+y^{2}}\)，\(\theta=\tan^{-1}\frac yx\)（注意象限！）</li><li>向量 \(\begin{pmatrix}a\\b\end{pmatrix}\) 的大小 \(\sqrt{a^{2}+b^{2}}\)</li><li>向量加减：对应分量相加减；数乘：每个分量都乘</li><li>矩阵加减：同位置相加减</li></ul></div>
   
 <div class="level lv1">
@@ -960,6 +1238,7 @@ window.MathJax = {
     <h3>一维运动 SUVAT <span class="en">1D SUVAT</span></h3>
     <div class="meta"><span class="tag hot">必练计算</span><span class="cnt">26 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>SUVAT 有五个量：位移 \(s\)、初速度 \(u\)、末速度 \(v\)、加速度 \(a\)、时间 \(t\)。知道其中三个就能求另外两个。先列出已知量和要求的量，再选一个不含多余未知量的公式。只适用于加速度不变的运动。</p><p class="ex"><b>例</b>从静止以 3 m/s² 加速 5 s：\(u=0\)，\(a=3\)，\(t=5\)，求 \(v\)：\(v=u+at=15\) m/s</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>\(s\) 位移，\(u\) 初速度，\(v\) 末速度，\(a\) 加速度，\(t\) 时间（只在加速度恒定时使用）</li><li>\(v=u+at\)　　\(s=ut+\frac12at^{2}\)　　\(v^{2}=u^{2}+2as\)　　\(s=\frac{(u+v)}{2}t\)</li><li>解题步骤：列出已知的三个量 → 写出要求的量 → 选不含第五个量的公式</li><li>s–t 图斜率 = 速度；v–t 图斜率 = 加速度，面积 = 位移</li><li>自由落体 \(a=g=9.8\ \text{m/s}^2\)（有的题用 10）</li></ul></div>
   
 <div class="level lv1">
@@ -1009,6 +1288,7 @@ window.MathJax = {
     <h3>二维运动与抛体 <span class="en">2D SUVAT & Projectiles</span></h3>
     <div class="meta"><span class="tag">对应发射器项目</span><span class="cnt">14 题</span></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>抛体运动拆成两个互不影响的方向：水平方向匀速（\(a=0\)），竖直方向是加速度为 \(g\) 的 SUVAT。时间 \(t\) 是连接两个方向的桥梁：通常先用竖直方向求 \(t\)，再用水平方向求距离。</p><p class="ex"><b>例</b>从 1.25 m 高的桌子以 2 m/s 水平滚落（g = 10）：\(1.25=\frac12\times10\times t^{2}\)，\(t=0.5\) s；水平距离 \(=2\times0.5=1\) m</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>水平和竖直方向独立：水平 \(a=0\)，竖直 \(a=-g\)；时间 \(t\) 是两个方向的桥梁</li><li>分解初速度：\(u_x=u\cos\theta\)，\(u_y=u\sin\theta\)</li><li>同一高度落地：飞行时间 \(T=\dfrac{2u\sin\theta}{g}\)，射程 \(R=\dfrac{u^{2}\sin2\theta}{g}\)，最大高度 \(H=\dfrac{u^{2}\sin^{2}\theta}{2g}\)</li><li>45° 射程最远；互余的两个角（如 30° 和 60°）射程相同</li></ul></div>
   
 <div class="level lv1">
@@ -1048,6 +1328,7 @@ window.MathJax = {
     <h3>二进制与十六进制 <span class="en">Binary & Hexadecimal</span></h3>
     <div class="meta"><span class="tag">补充</span><span class="cnt">13 题</span><a class="to-drill" href="#drills">随机练习 →</a></div>
   </header>
+  <div class="explain"><p class="key-label">讲解 Explanation</p><p>十进制每一位是 10 的幂，二进制每一位是 2 的幂，十六进制每一位是 16 的幂。转成十进制：每位数字乘位值再相加。十进制转二进制：拆成 8、4、2、1 这些位值之和，或反复除以 2 取余数倒着写。</p><p class="ex"><b>例</b>\(1011_2=8+0+2+1=11\)；\(13=8+4+1\)，所以是 \(1101_2\)</p></div>
   <div class="key"><p class="key-label">要点 Key ideas</p><ul><li>二进制位值：…, 128, 64, 32, 16, 8, 4, 2, 1</li><li>十六进制：0–9，A=10, B=11, C=12, D=13, E=14, F=15；位值 …, 256, 16, 1</li><li>每 4 位二进制 = 1 位十六进制</li></ul></div>
   
 <div class="level lv1">
@@ -1258,6 +1539,24 @@ const DRILLS = {
       return { q: M(eq), a: M(`x=${roots.join(',\\ ')}`) };
     }
   },
+  surdX: {
+    title: '分子分母都含根式', en: 'Conjugate: (a+b√c)/(d+e√c)', instr: 'Rationalise. Answer in the form p + q√c.',
+    gen() {
+      let s, p, q, c, d;
+      do { s = pick([2, 3, 5, 6, 7]); p = ri(-4, 6); q = ri(-3, 4); c = ri(1, 5); d = pick([1, -1, 2, -2]); }
+      while (q === 0 || c * c - d * d * s === 0 || (p === 0 && Math.abs(q) === 1));
+      // numerator = (p + q√s)(c + d√s)
+      const R = p * c + q * d * s, C = p * d + q * c;
+      return { q: M(`\\dfrac{${surdExpr(R, C, s)}}{${surdExpr(c, d, s)}}`), a: M(surdExpr(p, q, s)) };
+    }
+  },
+  surdSq: {
+    title: '根式平方展开', en: 'Square surd brackets', instr: 'Expand and simplify.',
+    gen() {
+      const s = pick([2, 3, 5, 6, 7, 10]), a = ri(1, 6), b = ri(1, 3), sg = pick([1, -1]);
+      return { q: M(`(${a}${sg > 0 ? '+' : '-'}${b === 1 ? '' : b}\\sqrt{${s}})^{2}`), a: M(surdExpr(a * a + b * b * s, sg * 2 * a * b, s)) };
+    }
+  },
   degrad: {
     title: '角度与弧度', en: 'Degrees ↔ radians', instr: 'Convert.',
     gen() {
@@ -1360,7 +1659,7 @@ if (typeof module !== 'undefined') module.exports = DRILLS;
   // drills
   const typeset = el => { if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]).catch(() => {}); };
   const grid = document.getElementById('drill-grid');
-  const ORDER = ['laws', 'frac', 'sci', 'expeq', 'surdS', 'surdA', 'surdM', 'surdR', 'degrad', 'unit', 'quad', 'polar', 'suvat', 'base'];
+  const ORDER = ['laws', 'frac', 'sci', 'expeq', 'surdS', 'surdA', 'surdM', 'surdR', 'surdX', 'surdSq', 'degrad', 'unit', 'quad', 'polar', 'suvat', 'base'];
   ORDER.forEach(k => {
     const d = DRILLS[k];
     const card = document.createElement('div');
